@@ -45,10 +45,14 @@
 module load CUDA/11.7.0
 module load UCX-CUDA/1.13.1-CUDA-11.7.0
 module load cuDNN/8.4.1.50-CUDA-11.7.0
-module load PyTorch/2.1.2-CUDA-11.7.0
+module load Anaconda3/2023.07-2
+# module load PyTorch/2.1.2-CUDA-11.7.0
 
 # The job command(s):
-source .venv/bin/activate
+eval "$(conda shell.bash hook)"
+conda activate deepseek
+
+echo "$(conda env list)"
 
 python code_review_instruction.py \
     --ckpt_dir ./ckpt/deepseek-coder-6.7b-instruct \

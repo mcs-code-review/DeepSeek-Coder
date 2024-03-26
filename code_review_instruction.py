@@ -2,8 +2,8 @@ import json
 import os
 import re
 
-import fire
 import pandas as pd
+import fire
 import torch
 from tqdm import tqdm
 from transformers import AutoModelForCausalLM, AutoTokenizer
@@ -15,7 +15,7 @@ class Config:
         conf_path: a json file storing configs
         """
         with open(conf_path, "r") as json_file:
-            conf = json.load(json_file.read())
+            conf = json.load(json_file)
 
         for key, value in conf.items():
             setattr(self, key, value)
