@@ -56,7 +56,7 @@ def main(
     tokenizer_path: str,
     conf_path: str,
     temperature: float = 0.0,
-    top_p: float = 1.0,  # 0.95,
+    top_p: float = 0.95,
     max_new_tokens: int = 512,
     debug: bool = False,
 ):

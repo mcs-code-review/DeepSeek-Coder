@@ -6,7 +6,7 @@
 #SBATCH --nodes=1
 
 # The name of the job:
-#SBATCH --job-name="run_6.7b"
+#SBATCH --job-name="6.7b-instruct-codereview-trimmed"
 
 # The project ID which this job should run under:
 #SBATCH --account="punim2247"
@@ -37,7 +37,7 @@
 #SBATCH --time=0-1:0:00
 
 # Standard output and error log
-#SBATCH -o logs/run_6.7b.log
+#SBATCH -o logs/6.7b-instruct-codereview-trimmed.log
 
 # Run the job from the directory where it was launched (default)
 
@@ -54,7 +54,7 @@ python code_review_instruction.py \
     --ckpt_dir ./ckpt/deepseek-coder-6.7b-instruct \
     --tokenizer_path ./ckpt/deepseek-coder-6.7b-instruct \
     --conf_path ../config/deepseek-coder-6.7b-instruct-codereview-trimmed.json \
-    --temperature 0 --top_p 1.0\
+    --temperature 0.0 --top_p 0.95 \
     --max_new_tokens 512 \
     --debug True
 
