@@ -28,9 +28,9 @@ IMPORT_HELPER = {
         "import string",
         "from typing import *",
         "from collections import *",
-        "from functools import *"
+        "from functools import *",
     ],
-    "go"   : [
+    "go": [
         "math",
         "strings",
         "fmt",
@@ -42,7 +42,7 @@ IMPORT_HELPER = {
         "math/rand",
         "crypto/md5",
     ],
-    "cpp"   : [
+    "cpp": [
         "#include<stdlib.h>",
         "#include<algorithm>",
         "#include<math.h>",
@@ -57,10 +57,10 @@ IMPORT_HELPER = {
 
 
 LANGUAGE_NAME = {
-    "cpp"   : "CPP",
-    "go"    : "Go",
-    "java"  : "Java",
-    "js"    : "JavaScript",
+    "cpp": "CPP",
+    "go": "Go",
+    "java": "Java",
+    "js": "JavaScript",
     "python": "Python",
 }
 
@@ -75,17 +75,25 @@ def read_dataset(
     if "humaneval" in dataset_type.lower():
         if data_file is None:
             current_path = os.path.dirname(os.path.abspath(__file__))
-            data_file = os.path.join(current_path, "..", "humaneval-x", "python", "data", "humaneval_python.jsonl.gz")
+            data_file = os.path.join(
+                current_path,
+                "..",
+                "humaneval-x",
+                "python",
+                "data",
+                "humaneval_python.jsonl.gz",
+            )
         dataset = {task["task_id"]: task for task in stream_jsonl(data_file)}
     else:
         raise f"Dataset: {dataset_type} not supported."
 
     return dataset
 
+
 def estimate_pass_at_k(
-        num_samples: Union[int, List[int], np.ndarray],
-        num_correct: Union[List[int], np.ndarray],
-        k: int
+    num_samples: Union[int, List[int], np.ndarray],
+    num_correct: Union[List[int], np.ndarray],
+    k: int,
 ) -> np.ndarray:
     """
     Estimates pass@k of each problem and returns them in an array.
@@ -105,17 +113,26 @@ def estimate_pass_at_k(
         assert len(num_samples) == len(num_correct)
         num_samples_it = iter(num_samples)
 
-    return np.array([estimator(int(n), int(c), k) for n, c in zip(num_samples_it, num_correct)])
+    return np.array(
+        [estimator(int(n), int(c), k) for n, c in zip(num_samples_it, num_correct)]
+    )
 
-def process_humaneval_test(sample, problems, example_test=False, is_mbpp=False, language="python"):
+
+def process_humaneval_test(
+    sample, problems, example_test=False, is_mbpp=False, language="python"
+):
     task_id = sample["task_id"]
-    
+
     if is_mbpp:
         return sample["generation"] + "\n" + "\n".join(problems[task_id]["test"])
-    #language = task_id.split("/")[0].lower()
+    # language = task_id.split("/")[0].lower()
 
     prompt = sample.get("prompt", "")
-    if example_test and "example_test" in problems[task_id] and problems[task_id]["example_test"] != "":
+    if (
+        example_test
+        and "example_test" in problems[task_id]
+        and problems[task_id]["example_test"] != ""
+    ):
         test = problems[task_id]["example_test"]
     else:
         test = problems[task_id]["test"]
@@ -123,12 +140,12 @@ def process_humaneval_test(sample, problems, example_test=False, is_mbpp=False, 
 
     # Pre-process for different languages
     if language == "python":
-        '''code_ = []
+        """code_ = []
         for line in code.split("\n"):
             if (len(line.strip()) > 0 and line[0] != ' ' and line[0] != '\t'):
                 break
             code_.append(line)
-        code = "\n".join(code_)'''
+        code = "\n".join(code_)"""
         test_setup = "\n".join(IMPORT_HELPER["python"]) + "\n"
         test_string = test_setup + code + "\n" + test + "\n"
     elif language == "cpp":
@@ -154,10 +171,21 @@ def process_humaneval_test(sample, problems, example_test=False, is_mbpp=False, 
             if pkg not in test_setup:
                 p = pkg.split("/")[-1]
                 if p + "." in code:
-                    other_pkgs.append(f"\"{pkg}\"")
+                    other_pkgs.append(f'"{pkg}"')
         if other_pkgs:
-            import_other_pkgs = "import (\n" + "    ".join([p + "\n" for p in other_pkgs]) + ")"
-            test_string = test_setup + "\n" + import_other_pkgs + "\n" + prompt + code + "\n" + test
+            import_other_pkgs = (
+                "import (\n" + "    ".join([p + "\n" for p in other_pkgs]) + ")"
+            )
+            test_string = (
+                test_setup
+                + "\n"
+                + import_other_pkgs
+                + "\n"
+                + prompt
+                + code
+                + "\n"
+                + test
+            )
         else:
             test_string = test_setup + "\n" + prompt + code + "\n" + test
     elif language == "rust":
@@ -216,10 +244,19 @@ def evaluate_functional_correctness(
                     lang = "js"
                 tmp_dir_ = os.path.join(tmp_dir, lang, "evaluation")
                 sample["generation"] = sample["canonical_solution"]
-                sample["test_code"] = process_humaneval_test(sample, problems, example_test, language)
+                sample["test_code"] = process_humaneval_test(
+                    sample, problems, example_test, language
+                )
                 if sample["test_code"] is None:
                     continue
-                args = (task_id, sample, lang, timeout, tmp_dir_, completion_id[task_id])
+                args = (
+                    task_id,
+                    sample,
+                    lang,
+                    timeout,
+                    tmp_dir_,
+                    completion_id[task_id],
+                )
                 future = executor.submit(check_correctness, *args)
                 futures.append(future)
                 completion_id[task_id] += 1
@@ -238,7 +275,9 @@ def evaluate_functional_correctness(
                     lang = "python"
                 tmp_dir_ = os.path.join(tmp_dir, lang, "evaluation")
                 sample["task_id"] = task_id
-                sample["test_code"] = process_humaneval_test(sample, problems, example_test, is_mbpp, language)
+                sample["test_code"] = process_humaneval_test(
+                    sample, problems, example_test, is_mbpp, language
+                )
                 if sample["test_code"] is None:
                     continue
                 if "completion_id" in sample:
@@ -264,12 +303,14 @@ def evaluate_functional_correctness(
             results[result["task_id"]].append((result["completion_id"], result))
 
             sample = id2samples[(result["task_id"], result["completion_id"])]
-            sample_with_results.append({
-                'task_id': result['task_id'],
-                'completion_id': result["completion_id"],
-                'passed': result['passed'],
-                'generation': sample['generation']
-            })
+            sample_with_results.append(
+                {
+                    "task_id": result["task_id"],
+                    "completion_id": result["completion_id"],
+                    "passed": result["passed"],
+                    "generation": sample["generation"],
+                }
+            )
 
             for key in sample:
                 if key not in sample_with_results[-1]:
@@ -288,17 +329,18 @@ def evaluate_functional_correctness(
         ks = k
         pass_at_k = {
             f"pass@{k}": estimate_pass_at_k(total, correct, k).mean()
-            for k in ks if (total >= k).all()
+            for k in ks
+            if (total >= k).all()
         }
         print(pass_at_k)
     else:
         print("Total:", np.sum(total))
         print("Correct:", np.sum(correct))
-    
+
     if result_path is not None:
-        with open(result_path, 'w', encoding='utf-8') as fw:
+        with open(result_path, "w", encoding="utf-8") as fw:
             for sample_with_result in sample_with_results:
-                fw.write(json.dumps(sample_with_result) + '\n')
+                fw.write(json.dumps(sample_with_result) + "\n")
             print("Save evaluation results to\n{}".format(result_path))
 
     return pass_at_k

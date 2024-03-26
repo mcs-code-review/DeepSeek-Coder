@@ -2,6 +2,7 @@ import os
 import numpy as np
 import json
 
+
 class HumanEvalDataset:
 
     def __init__(self, root, sample_num=1, language="python", issft=False):
@@ -12,7 +13,9 @@ class HumanEvalDataset:
         issft: whether to use the SFT setting
         """
         self.root = root
-        self.data = open(os.path.join(self.root, f"humaneval-{language}.jsonl")).readlines()
+        self.data = open(
+            os.path.join(self.root, f"humaneval-{language}.jsonl")
+        ).readlines()
 
         tmp = self.get_qa_only_data(self.data, issft)
         self.clean_data = []
@@ -44,7 +47,14 @@ class HumanEvalDataset:
                 s = line["stop_tokens"]
             else:
                 s = []
-            ans.append({"prompt":prompt, "task_id":line["task_id"], "original_prompt": origin_prompt, "stopwords":s})
+            ans.append(
+                {
+                    "prompt": prompt,
+                    "task_id": line["task_id"],
+                    "original_prompt": origin_prompt,
+                    "stopwords": s,
+                }
+            )
         return ans
 
     def __len__(self):

@@ -3,7 +3,7 @@ def cleanup_code(
     language_type: str = None,
     dataset: str = None,
     issft: bool = False,
-    stop_words = []
+    stop_words=[],
 ):
     """
     Cleans up the generated code.
@@ -15,11 +15,22 @@ def cleanup_code(
         stop_words = ["\ndef", "\nclass", "\nif", "\n#", "\nprint"]
         code = _truncate_code_at_stopwords(code, stop_words)
     elif language_type.lower() == "ts":
-        code = _truncate_code_at_stopwords(code, stop_words + ["\nexport", "\nimport", "\nexport default", "\nimport default", "\nconsole.log"])
+        code = _truncate_code_at_stopwords(
+            code,
+            stop_words
+            + [
+                "\nexport",
+                "\nimport",
+                "\nexport default",
+                "\nimport default",
+                "\nconsole.log",
+            ],
+        )
     else:
         code = _truncate_code_at_stopwords(code, stop_words)
 
     return code
+
 
 def _clean_python_code_for_sft(code):
     code = code.replace("\r", "")
@@ -30,6 +41,7 @@ def _clean_python_code_for_sft(code):
         code = code[:end_idx].strip()
 
     return code
+
 
 def _truncate_code_at_stopwords(code, stop_words):
     min_stop_idx = len(code)

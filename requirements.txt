@@ -8,3 +8,4 @@ timeout-decorator
 attrdict
 fire
 huggingface_hub[cli]
+pandas

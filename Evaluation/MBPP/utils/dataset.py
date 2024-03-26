@@ -2,6 +2,7 @@ import os
 import numpy as np
 import json
 
+
 class MBPPDataset:
 
     def __init__(self, root, samplenum=1):
@@ -13,7 +14,7 @@ class MBPPDataset:
 
         self.clean_data = self.get_qa_only_data(self.data)
         self.prompt = []
-        for i in range(1, 4):            
+        for i in range(1, 4):
             prompt = self.clean_data[i]["prompt"]
             tests = "\n".join(self.clean_data[i]["test"])
             code = self.clean_data[i]["code"].replace("\r", "").replace("\t", "    ")
@@ -36,7 +37,14 @@ class MBPPDataset:
             prompt = line["text"]
             suffix = line["test_list"]
             code = line["code"]
-            ans.append({"prompt":prompt, "test":suffix, "code":code, "task_id":line["task_id"]})
+            ans.append(
+                {
+                    "prompt": prompt,
+                    "test": suffix,
+                    "code": code,
+                    "task_id": line["task_id"],
+                }
+            )
         return ans
 
     def __len__(self):
@@ -45,4 +53,3 @@ class MBPPDataset:
     def __getitem__(self, index):
         sample = self.testdata[index]
         return sample
-
