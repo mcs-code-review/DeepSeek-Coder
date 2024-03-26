@@ -6,3 +6,5 @@ sympy==1.12
 pebble 
 timeout-decorator 
 attrdict
+fire
+huggingface_hub[cli]
