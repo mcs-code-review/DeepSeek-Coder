@@ -3,4 +3,5 @@ Evaluation/MBPP/eval_instruct.sh
 Evaluation/LeetCode/output/
 
 ckpt/
+logs/
 .venv/

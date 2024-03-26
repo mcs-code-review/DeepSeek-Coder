@@ -1,6 +1,6 @@
 #!/bin/bash
 # Partition for the job:
-#SBATCH --partition=gpu-a100
+#SBATCH --partition=gpu-a100-short
 
 # Multithreaded (SMP) job: must run on one node 
 #SBATCH --nodes=1
@@ -21,7 +21,7 @@
 ## SBATCH --qos=deeplearn
 
 # Requested memory per node:
-#SBATCH --mem=126G
+#SBATCH --mem=32G
 
 # Use this email address:
 #SBATCH --mail-user=mukhammad.karimov@student.unimelb.edu.au
