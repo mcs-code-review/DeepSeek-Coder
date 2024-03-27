@@ -67,6 +67,8 @@ def main(
         print("CUDA is not available")
         return
 
+    # torch.backends.cuda.enable_mem_efficient_sdp(False)
+    # torch.backends.cuda.enable_flash_sdp(False)
     # set trust_remote_code=False to use local models
     tokenizer = AutoTokenizer.from_pretrained(ckpt_dir, trust_remote_code=False)
     model = AutoModelForCausalLM.from_pretrained(

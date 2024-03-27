@@ -6,7 +6,7 @@
 #SBATCH --nodes=1
 
 # The name of the job:
-#SBATCH --job-name="6.7b-instruct-codereview"
+#SBATCH --job-name="6.7b-instruct-codereview-new"
 
 # The project ID which this job should run under:
 #SBATCH --account="punim2247"
@@ -34,10 +34,10 @@
 #SBATCH --mail-type=END
 
 # The maximum running time of the job in days-hours:mins:sec
-#SBATCH --time=1-00:0:00
+#SBATCH --time=2-00:0:00
 
 # Standard output and error log
-#SBATCH -o logs/6.7b-instruct-codereview.log
+#SBATCH -o logs/6.7b-instruct-codereview-new.log
 
 # Run the job from the directory where it was launched (default)
 
@@ -54,7 +54,7 @@ source .venv/bin/activate
 python code_review_instruction.py \
     --ckpt_dir ./ckpt/deepseek-coder-6.7b-instruct \
     --tokenizer_path ./ckpt/deepseek-coder-6.7b-instruct \
-    --conf_path ../config/deepseek-coder-6.7b-instruct-codereview.json \
+    --conf_path ../config/deepseek-coder-6.7b-instruct-codereview-new.json \
     --temperature 0.0 --top_p 0.95 \
     --max_new_tokens 512 \
     --debug False
