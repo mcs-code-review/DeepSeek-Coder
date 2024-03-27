@@ -115,7 +115,7 @@ def main(
 
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
-    output_path = f"{cfg.out_dir}/{cfg.model}/{dataset_name}_prompt.jsonl"
+    output_path = f"{cfg.out_dir}/{cfg.model}/{dataset_name}_output.jsonl"
 
     df.to_json(output_path, orient="records", lines=True)
     print(f"Output saved to {output_path}")

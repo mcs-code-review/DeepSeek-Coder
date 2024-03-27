@@ -1,6 +1,6 @@
 #!/bin/bash
 # Partition for the job:
-#SBATCH --partition=gpu-a100
+#SBATCH --partition=gpu-a100-short
 
 # Multithreaded (SMP) job: must run on one node 
 #SBATCH --nodes=1
@@ -34,7 +34,7 @@
 #SBATCH --mail-type=END
 
 # The maximum running time of the job in days-hours:mins:sec
-#SBATCH --time=0-10:0:00
+#SBATCH --time=0-1:0:00
 
 # Standard output and error log
 #SBATCH -o logs/6.7b-instruct-codereview.log
@@ -42,6 +42,7 @@
 # Run the job from the directory where it was launched (default)
 
 # The modules to load:
+module load foss/2022a
 module load CUDA/11.7.0
 module load UCX-CUDA/1.13.1-CUDA-11.7.0
 module load cuDNN/8.4.1.50-CUDA-11.7.0
@@ -60,4 +61,6 @@ python code_review_instruction.py \
 
 ##DO NOT ADD/EDIT BEYOND THIS LINE##
 ##Job monitor command to list the resource usage
+my-job-stats -c -n -s
 my-job-stats -a -n -s
+nvidia-smi
