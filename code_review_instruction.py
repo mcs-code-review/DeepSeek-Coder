@@ -61,10 +61,17 @@ def main(
     debug: bool = False,
 ):
 
+    if torch.cuda.is_available():
+        print("CUDA is available")
+    else:
+        print("CUDA is not available")
+        return
+
     # set trust_remote_code=False to use local models
     tokenizer = AutoTokenizer.from_pretrained(ckpt_dir, trust_remote_code=False)
     model = AutoModelForCausalLM.from_pretrained(
-        tokenizer_path, trust_remote_code=False, torch_dtype=torch.bfloat16
+        tokenizer_path, trust_remote_code=False, torch_dtype=torch.bfloat16,
+        device_map="auto"
     ).cuda()
 
     cfg = Config(conf_path)
