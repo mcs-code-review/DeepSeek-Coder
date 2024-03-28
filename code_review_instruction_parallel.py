@@ -7,6 +7,7 @@ import fire
 import torch
 from tqdm import tqdm
 from transformers import AutoModelForCausalLM, AutoTokenizer
+from vllm import LLM, SamplingParams
 
 
 class Config:
@@ -58,8 +59,10 @@ def main(
     temperature: float = 0.0,
     top_p: float = 0.95,
     max_new_tokens: int = 512,
+    tp_size: int = 1,
     debug: bool = False,
 ):
+    cfg = Config(conf_path)
 
     if torch.cuda.is_available():
         print("CUDA is available")
@@ -74,57 +77,85 @@ def main(
     #     torch_dtype=torch.float16,
     # ).cuda()
 
-    cfg = Config(conf_path)
+    sampling_params = SamplingParams(
+        temperature=temperature, top_p=top_p, max_tokens=max_new_tokens
+    )
+    model_name = "deepseek-ai/deepseek-coder-1.3b-instruct"
+    tokenizer = AutoTokenizer.from_pretrained(model_name)
+    model = LLM(
+        model=model_name,
+        trust_remote_code=True,
+        gpu_memory_utilization=0.9,
+        tensor_parallel_size=tp_size,
+    )
 
     df = get_user_prompts(cfg.in_path)
 
     if debug:
         df = df.head(5)
 
-    outputs = []
-    for user_prompt in tqdm(df.user_prompt, total=len(df.index), desc="Prompting"):
-        instructions = [
-            {"role": "system", "content": cfg.system_prompt},
-            {"role": "user", "content": user_prompt},
-        ]
+    messages_list = [
+        [{"role": "user", "content": "Who are you?"}],
+        [{"role": "user", "content": "What can you do?"}],
+        [{"role": "user", "content": "Explain Transformer briefly."}],
+    ]
+    prompts = [
+        tokenizer.apply_chat_template(
+            messages, add_generation_prompt=True, tokenize=False
+        )
+        for messages in messages_list
+    ]
 
-        # inputs = tokenizer.apply_chat_template(
-        #     instructions, add_generation_prompt=True, return_tensors="pt"
-        # ).to(model.device)
-        # outputs_raw = model.generate(
-        #     inputs,
-        #     max_new_tokens=max_new_tokens,
-        #     do_sample=False,
-        #     top_k=50,
-        #     top_p=top_p,
-        #     temperature=temperature,
-        #     num_return_sequences=1,
-        #     eos_token_id=tokenizer.eos_token_id,
-        #     pad_token_id=tokenizer.eos_token_id,
-        # )
-        # results = tokenizer.decode(
-        #     outputs_raw[0][len(inputs[0]) :], skip_special_tokens=True
-        # )
+    sampling_params.stop = [tokenizer.eos_token]
+    outputs = llm.generate(prompts, sampling_params)
 
-        # outputs.append(results)
+    generated_text = [output.outputs[0].text for output in outputs]
+    print(generated_text)
 
-        if debug:
-            print("Instruction:\n", instructions)
-            print("Response:\n", results)
-            print("\n==================================\n")
-    print("Prompting done")
+    # outputs = []
+    # for user_prompt in tqdm(df.user_prompt, total=len(df.index), desc="Prompting"):
+    #     instructions = [
+    #         {"role": "system", "content": cfg.system_prompt},
+    #         {"role": "user", "content": user_prompt},
+    #     ]
 
-    df["deepseek_answer"] = outputs
-    df["deepseek_code"] = df["deepseek_answer"].apply(extract_code_diff)
+    #     # inputs = tokenizer.apply_chat_template(
+    #     #     instructions, add_generation_prompt=True, return_tensors="pt"
+    #     # ).to(model.device)
+    #     # outputs_raw = model.generate(
+    #     #     inputs,
+    #     #     max_new_tokens=max_new_tokens,
+    #     #     do_sample=False,
+    #     #     top_k=50,
+    #     #     top_p=top_p,
+    #     #     temperature=temperature,
+    #     #     num_return_sequences=1,
+    #     #     eos_token_id=tokenizer.eos_token_id,
+    #     #     pad_token_id=tokenizer.eos_token_id,
+    #     # )
+    #     # results = tokenizer.decode(
+    #     #     outputs_raw[0][len(inputs[0]) :], skip_special_tokens=True
+    #     # )
 
-    dataset_name = os.path.splitext(os.path.basename(cfg.in_path))[0]
-    output_dir = f"{cfg.out_dir}/{cfg.model}"
+    #     # outputs.append(results)
 
-    if not os.path.exists(output_dir):
-        os.makedirs(output_dir)
-    output_path = f"{cfg.out_dir}/{cfg.model}/{dataset_name}_output.jsonl"
+    #     if debug:
+    #         print("Instruction:\n", instructions)
+    #         print("Response:\n", results)
+    #         print("\n==================================\n")
+    # print("Prompting done")
 
-    df.to_json(output_path, orient="records", lines=True)
+    # df["deepseek_answer"] = outputs
+    # df["deepseek_code"] = df["deepseek_answer"].apply(extract_code_diff)
+
+    # dataset_name = os.path.splitext(os.path.basename(cfg.in_path))[0]
+    # output_dir = f"{cfg.out_dir}/{cfg.model}"
+
+    # if not os.path.exists(output_dir):
+    #     os.makedirs(output_dir)
+    # output_path = f"{cfg.out_dir}/{cfg.model}/{dataset_name}_output.jsonl"
+
+    # df.to_json(output_path, orient="records", lines=True)
     print(f"Output saved to {output_path}")
 
 

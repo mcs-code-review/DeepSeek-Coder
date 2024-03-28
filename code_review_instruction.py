@@ -70,7 +70,8 @@ def main(
     # set trust_remote_code=False to use local models
     tokenizer = AutoTokenizer.from_pretrained(ckpt_dir, trust_remote_code=False)
     model = AutoModelForCausalLM.from_pretrained(
-        tokenizer_path, trust_remote_code=False,
+        tokenizer_path,
+        trust_remote_code=False,
         torch_dtype=torch.float16,
     ).cuda()
 
