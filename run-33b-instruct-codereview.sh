@@ -22,7 +22,7 @@
 #SBATCH --constraint=dlg5
 
 # Requested memory per node:
-##SBATCH --mem=128G
+#SBATCH --mem=128G
 
 # Use this email address:
 #SBATCH --mail-user=mukhammad.karimov@student.unimelb.edu.au
