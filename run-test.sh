@@ -1,6 +1,6 @@
 #!/bin/bash
 # Partition for the job:
-#SBATCH --partition=deeplearn
+#SBATCH --partition=gpu-a100-short
 
 # Multithreaded (SMP) job: must run on one node 
 #SBATCH --nodes=1
@@ -16,10 +16,10 @@
 #SBATCH --cpus-per-task=8
 
 # Number of GPUs requested per node:
-#SBATCH --gres=gpu:4
+#SBATCH --gres=gpu:1
 # Slurm QoS:
-#SBATCH --qos=gpgpudeeplearn
-## SBATCH --constraint=dlg5
+##SBATCH --qos=gpgpudeeplearn
+##SBATCH --constraint=dlg5
 
 # Requested memory per node:
 ## SBATCH --mem=64G
@@ -59,7 +59,14 @@ echo "$(module list)"
 # The job command(s):
 source ~/venvs/deepseekcoder/bin/activate
 
-python code_review_instruction_parallel.py
+python code_review_instruction_parallel.py \
+    --ckpt_dir ./ckpt/deepseek-coder-6.7b-instruct \
+    --tokenizer_path ./ckpt/deepseek-coder-6.7b-instruct \
+    --conf_path ../config/deepseek-coder-test.json \
+    --temperature 0.0 --top_p 0.95 \
+    --max_new_tokens 512 \
+    --tp_size 1 \
+    --debug True
 
 ##DO NOT ADD/EDIT BEYOND THIS LINE##
 ##Job monitor command to list the resource usage

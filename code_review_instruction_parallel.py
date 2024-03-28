@@ -1,29 +1,126 @@
+import json
+import os
+import re
+
+import fire
+import pandas as pd
+import torch
+from tqdm import tqdm
 from transformers import AutoTokenizer
 from vllm import LLM, SamplingParams
 
-tp_size = 4  # Tensor Parallelism
-sampling_params = SamplingParams(temperature=0.0, top_p=0.9, max_tokens=512)
-model_name = "deepseek-ai/deepseek-coder-6.7b-instruct"
-tokenizer = AutoTokenizer.from_pretrained(model_name)
-llm = LLM(
-    model=model_name,
-    trust_remote_code=True,
-    gpu_memory_utilization=0.9,
-    tensor_parallel_size=tp_size,
-)
 
-messages_list = [
-    [{"role": "user", "content": "Who are you?"}],
-    [{"role": "user", "content": "What can you do?"}],
-    [{"role": "user", "content": "Explain Transformer briefly."}],
-]
-prompts = [
-    tokenizer.apply_chat_template(messages, add_generation_prompt=True, tokenize=False)
-    for messages in messages_list
-]
+class Config:
+    def __init__(self, conf_path):
+        """
+        conf_path: a json file storing configs
+        """
+        with open(conf_path, "r") as json_file:
+            conf = json.load(json_file)
 
-sampling_params.stop = [tokenizer.eos_token]
-outputs = llm.generate(prompts, sampling_params)
+        for key, value in conf.items():
+            setattr(self, key, value)
 
-generated_text = [output.outputs[0].text for output in outputs]
-print(generated_text)
+
+def create_prompt(comment, code_diff):
+    user_prompt = f"""
+    As a developer, imagine you've submitted a pull request and your team leader
+    requests you to make a change to a piece of code. The old code being
+    referred to in the hunk of code changes is:
+    ```
+    {code_diff}
+    ```
+    There is the code review for this code:
+    {comment}
+    Please generate the revised code according to the review
+    """
+    return user_prompt
+
+
+def get_user_prompts(in_path):
+    df = pd.read_json(path_or_buf=in_path, lines=True)
+    df["user_prompt"] = df.apply(lambda x: create_prompt(x.review, x.old), axis=1)
+    return df
+
+
+def extract_code_diff(text):
+    result = re.search(r"```(.*)```", text, re.DOTALL)
+
+    if result:
+        return result.group(1)
+    return "NO CODE"
+
+
+################################################# Main #################################################
+def main(
+    ckpt_dir: str,
+    tokenizer_path: str,
+    conf_path: str,
+    temperature: float = 0.0,
+    top_p: float = 0.95,
+    max_new_tokens: int = 512,
+    tp_size: int = 1,  # Tensor Parallelism
+    debug: bool = False,
+):
+    cfg = Config(conf_path)
+    if debug:
+        print(f"Config: {cfg.__dict__}")
+
+    if torch.cuda.is_available():
+        print("CUDA is available")
+    else:
+        print("CUDA is not available")
+        return
+
+    # set trust_remote_code=False to use local models
+    sampling_params = SamplingParams(temperature=0.0, top_p=0.9, max_tokens=512)
+    tokenizer = AutoTokenizer.from_pretrained(tokenizer_path, trust_remote_code=False)
+    llm = LLM(
+        model=ckpt_dir,
+        trust_remote_code=False,
+        gpu_memory_utilization=0.9,
+        tensor_parallel_size=tp_size,
+    )
+
+    def make_prompt(user_prompt):
+        instructions = [
+            {"role": "system", "content": cfg.system_prompt},
+            {"role": "user", "content": user_prompt},
+        ]
+        return tokenizer.apply_chat_template(
+            instructions, add_generation_prompt=True, tokenize=False
+        )
+
+    df = get_user_prompts(cfg.in_path)
+    prompts = df.user_prompt.apply(make_prompt)
+
+    if debug:
+        print(f"Prompts: {len(df.index)}")
+
+    sampling_params.stop = [tokenizer.eos_token]
+    outputs = llm.generate(prompts, sampling_params)
+
+    answers = [output.outputs[0].text for output in outputs]
+
+    df["deepseek_answer"] = answers
+    df["deepseek_code"] = df.deepseek_answer.apply(extract_code_diff)
+
+    if debug:
+        for output in outputs[:5]:
+            prompt = output.prompt
+            generated_text = output.outputs[0].text
+            print(f"Prompt: {prompt!r}, Generated text: {generated_text!r}")
+
+    dataset_name = os.path.splitext(os.path.basename(cfg.in_path))[0]
+    output_dir = f"{cfg.out_dir}/{cfg.model}"
+
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+    output_path = f"{cfg.out_dir}/{cfg.model}/{dataset_name}_output.jsonl"
+
+    df.to_json(output_path, orient="records", lines=True)
+    print(f"Output saved to {output_path}")
+
+
+if __name__ == "__main__":
+    fire.Fire(main)
