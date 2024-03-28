@@ -67,14 +67,12 @@ def main(
         print("CUDA is not available")
         return
 
-    # torch.backends.cuda.enable_mem_efficient_sdp(False)
-    # torch.backends.cuda.enable_flash_sdp(False)
     # set trust_remote_code=False to use local models
-    tokenizer = AutoTokenizer.from_pretrained(ckpt_dir, trust_remote_code=False)
-    model = AutoModelForCausalLM.from_pretrained(
-        tokenizer_path, trust_remote_code=False,
-        torch_dtype=torch.float16,
-    ).cuda()
+    # tokenizer = AutoTokenizer.from_pretrained(ckpt_dir, trust_remote_code=False)
+    # model = AutoModelForCausalLM.from_pretrained(
+    #     tokenizer_path, trust_remote_code=False,
+    #     torch_dtype=torch.float16,
+    # ).cuda()
 
     cfg = Config(conf_path)
 
@@ -90,25 +88,25 @@ def main(
             {"role": "user", "content": user_prompt},
         ]
 
-        inputs = tokenizer.apply_chat_template(
-            instructions, add_generation_prompt=True, return_tensors="pt"
-        ).to(model.device)
-        outputs_raw = model.generate(
-            inputs,
-            max_new_tokens=max_new_tokens,
-            do_sample=False,
-            top_k=50,
-            top_p=top_p,
-            temperature=temperature,
-            num_return_sequences=1,
-            eos_token_id=tokenizer.eos_token_id,
-            pad_token_id=tokenizer.eos_token_id,
-        )
-        results = tokenizer.decode(
-            outputs_raw[0][len(inputs[0]) :], skip_special_tokens=True
-        )
+        # inputs = tokenizer.apply_chat_template(
+        #     instructions, add_generation_prompt=True, return_tensors="pt"
+        # ).to(model.device)
+        # outputs_raw = model.generate(
+        #     inputs,
+        #     max_new_tokens=max_new_tokens,
+        #     do_sample=False,
+        #     top_k=50,
+        #     top_p=top_p,
+        #     temperature=temperature,
+        #     num_return_sequences=1,
+        #     eos_token_id=tokenizer.eos_token_id,
+        #     pad_token_id=tokenizer.eos_token_id,
+        # )
+        # results = tokenizer.decode(
+        #     outputs_raw[0][len(inputs[0]) :], skip_special_tokens=True
+        # )
 
-        outputs.append(results)
+        # outputs.append(results)
 
         if debug:
             print("Instruction:\n", instructions)

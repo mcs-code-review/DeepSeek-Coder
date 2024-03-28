@@ -2,15 +2,16 @@ accelerate
 attrdict
 huggingface-hub[cli]
 fire
-torch
 tokenizers
 transformers
 sympy
 pebble
 timeout-decorator 
-huggingface_hub[cli]
-pandas
-numpy
 pytz
 python-dateutil
 tqdm
+vllm
+# already installed in PyTorch/2.1.2-CUDA-11.7.0
+# torch
+# pandas
+# numpy
