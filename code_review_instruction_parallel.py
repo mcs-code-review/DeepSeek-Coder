@@ -51,6 +51,18 @@ def extract_code_diff(text):
     return "NO CODE"
 
 
+def save_output(cfg, df):
+    dataset_name = os.path.splitext(os.path.basename(cfg.in_path))[0]
+    output_dir = f"{cfg.out_dir}/{cfg.model}"
+
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+    output_path = f"{cfg.out_dir}/{cfg.model}/{dataset_name}_output.jsonl"
+
+    df.to_json(output_path, orient="records", lines=True)
+    return output_path
+
+
 ################################################# Main #################################################
 def main(
     ckpt_dir: str,
@@ -67,7 +79,7 @@ def main(
         print(f"Config: {cfg.__dict__}")
 
     if torch.cuda.is_available():
-        print("CUDA is available")
+        print(f"CUDA is available")
     else:
         print("CUDA is not available")
         return
@@ -111,14 +123,7 @@ def main(
             generated_text = output.outputs[0].text
             print(f"Prompt: {prompt!r}, Generated text: {generated_text!r}")
 
-    dataset_name = os.path.splitext(os.path.basename(cfg.in_path))[0]
-    output_dir = f"{cfg.out_dir}/{cfg.model}"
-
-    if not os.path.exists(output_dir):
-        os.makedirs(output_dir)
-    output_path = f"{cfg.out_dir}/{cfg.model}/{dataset_name}_output.jsonl"
-
-    df.to_json(output_path, orient="records", lines=True)
+    output_path = save_output(cfg, df)
     print(f"Output saved to {output_path}")
 
 
