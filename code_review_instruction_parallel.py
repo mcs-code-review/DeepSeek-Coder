@@ -8,6 +8,7 @@ import torch
 from tqdm import tqdm
 from transformers import AutoTokenizer
 from vllm import LLM, SamplingParams
+from evaluation import myeval
 
 
 class Config:
@@ -22,13 +23,30 @@ class Config:
             setattr(self, key, value)
 
 
+def remove_minus(code):
+    """
+    Remove the minus sign from the beginning of each line in the code.
+    """
+    return "\n".join([line[1:] for line in code.split("\n")])
+
+
+def remove_plus(code):
+    """
+    Remove the plus sign from the beginning of each line in the code.
+    """
+    return "\n".join(
+        [line[1:].strip() for line in code.split("\n") if line.strip() != ""]
+    )
+
+
 def create_prompt(comment, code_diff):
+    remove_minus_code_diff = remove_minus(code_diff)
     user_prompt = f"""
     As a developer, imagine you've submitted a pull request and your team leader
     requests you to make a change to a piece of code. The old code being
     referred to in the hunk of code changes is:
     ```
-    {code_diff}
+    {remove_minus_code_diff}
     ```
     There is the code review for this code:
     {comment}
@@ -44,11 +62,24 @@ def get_user_prompts(in_path):
 
 
 def extract_code_diff(text):
-    result = re.search(r"```(.*)```", text, re.DOTALL)
+    """
+    Extract code diff from text. Code is assumed to be in the format:
+    ```lang
+    code
+    ```
+    where lang is the language of the code.
+    """
 
-    if result:
-        return result.group(1)
+    code = re.findall(r"```[A-Za-z]*\n(.*?)\n```", text, re.DOTALL)
+    if code:
+        return code[0]
     return "NO CODE"
+
+
+def evaluate_code_diff(actual_code, refined_code):
+    remove_plus_code_diff = remove_plus(actual_code)
+    em, em_trim, _, _, bleu, bleu_trim = myeval(remove_plus_code_diff, refined_code)
+    return em, em_trim, bleu, bleu_trim
 
 
 def save_output(cfg, df):
@@ -116,6 +147,17 @@ def main(
 
     df["deepseek_answer"] = answers
     df["deepseek_code"] = df.deepseek_answer.apply(extract_code_diff)
+
+    (
+        df["deepseek_em"],
+        df["deepseek_em_trim"],
+        df["deepseek_bleu"],
+        df["deepseek_bleu_trim"],
+    ) = zip(
+        *df.apply(
+            lambda row: evaluate_code_diff(row["new"], row["deepseek_code"]), axis=1
+        )
+    )
 
     if debug:
         for output in outputs[:5]:
