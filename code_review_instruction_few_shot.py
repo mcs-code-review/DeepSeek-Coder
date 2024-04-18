@@ -199,7 +199,7 @@ def main(
         df["deepseek_bleu_trim"],
     ) = zip(
         *df.apply(
-            lambda row: evaluate_code_diff(row["new"], row["deepseek_code"]), axis=1
+            lambda row: evaluate_code_diff(row["output"], row["deepseek_code"]), axis=1
         )
     )
 
