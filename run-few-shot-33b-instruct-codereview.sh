@@ -66,7 +66,7 @@ python code_review_instruction_few_shot.py \
     --temperature 0.0 --top_p 0.95 \
     --max_new_tokens 512 \
     --tp_size 2 \
-    --debug True
+    --debug False
 
 ##DO NOT ADD/EDIT BEYOND THIS LINE##
 ##Job monitor command to list the resource usage

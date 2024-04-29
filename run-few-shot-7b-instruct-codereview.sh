@@ -35,7 +35,7 @@
 #SBATCH --mail-type=END
 
 # The maximum running time of the job in days-hours:mins:sec
-#SBATCH --time=0-2:0:00
+#SBATCH --time=0-4:0:00
 
 # Standard output and error log
 #SBATCH -o logs/few-shot-7b-instruct-codereview.log
@@ -66,7 +66,7 @@ python code_review_instruction_few_shot.py \
     --temperature 0.0 --top_p 0.95 \
     --max_new_tokens 512 \
     --tp_size 1 \
-    --debug True
+    --debug False
 
 ##DO NOT ADD/EDIT BEYOND THIS LINE##
 ##Job monitor command to list the resource usage

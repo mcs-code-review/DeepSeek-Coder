@@ -51,20 +51,34 @@ LANGUAGES = {
     "rb": "Ruby",
 }
 
-num_sample = 3
-
 
 def create_example_prompt(row):
     ret = ""
 
-    for i in range(1, num_sample + 1):
-        code, comment = row["sample_input_{}".format(i)].split("<SEP_DATA>")
-        improved_code = row["sample_output_{}".format(i)]
+    for example in row["examples"]:
+        old, comment = example["_source"]["old"], example["_source"]["comment"]
+        new = example["_source"]["new"]
+
+        old = remove_minus(old)
+        new = remove_plus(new)
+
         sample_prompt = f"""
-        ## Example\n\nSubmitted code:
-        ```{code}```
-        \n\nDeveloper comment: ```{comment}```
-        \n\nImproved code: ```{improved_code}```\n\n---\n\n
+        ## Example
+        Submitted code:
+        ```
+        {old}
+        ```
+        Developer comment:
+        ```
+        {comment}
+        ```
+        Improved code:
+        ```
+        {new}
+        ```
+        
+        ---
+        
         """
         ret = ret + sample_prompt
 
@@ -72,9 +86,8 @@ def create_example_prompt(row):
 
 
 def create_prompt(row):
-    # comment, code_diff = row["review"], row["old"]
-    code_diff, comment = row["input"].split("<SEP_DATA>")
-    # language_code = row["language"]
+    comment, code_diff = row["comment"], row["old"]
+    # language = row["lang"]
 
     remove_minus_code_diff = remove_minus(code_diff)
     # language = LANGUAGES.get(language_code, "Python")
@@ -87,9 +100,15 @@ def create_prompt(row):
     sample_prompt = create_example_prompt(row)
 
     main_prompt = f"""
-    Submitted code: ```{remove_minus_code_diff}```
-    Developer comment: ```{comment}```
-    \n\nImproved code: 
+    Submitted code:
+    ```
+    {remove_minus_code_diff}
+    ```
+    Developer comment:
+    ```
+    {comment}
+    ```
+    Improved code: 
     """
     return prompt_header + sample_prompt + main_prompt
 
@@ -103,8 +122,8 @@ def make_instructions(system_prompt, user_prompt):
 
 
 def get_user_prompts(in_path):
-    df = pd.read_csv(in_path)
-    df["user_prompt"] = df.apply(lambda x: create_prompt(x), axis=1)
+    df = pd.read_json(in_path, lines=True)
+    df["user_prompt"] = df.apply(create_prompt, axis=1)
     return df
 
 
@@ -199,7 +218,7 @@ def main(
         df["deepseek_bleu_trim"],
     ) = zip(
         *df.apply(
-            lambda row: evaluate_code_diff(row["output"], row["deepseek_code"]), axis=1
+            lambda row: evaluate_code_diff(row["new"], row["deepseek_code"]), axis=1
         )
     )
 
