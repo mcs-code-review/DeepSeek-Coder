@@ -62,7 +62,7 @@ source ~/venvs/deepseekcoder/bin/activate
 python code_review_instruction_few_shot.py \
     --ckpt_dir ./ckpt/deepseek-coder-33b-instruct \
     --tokenizer_path ./ckpt/deepseek-coder-33b-instruct \
-    --conf_path ../config/deepseek-coder-33b-instruct-codereview.json \
+    --conf_path ../config/deepseek-coder-few-shot-33b-instruct-codereview.json \
     --temperature 0.0 --top_p 0.95 \
     --max_new_tokens 512 \
     --tp_size 2 \
