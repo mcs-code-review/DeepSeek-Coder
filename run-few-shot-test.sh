@@ -1,6 +1,7 @@
 #!/bin/bash
 # Partition for the job:
-#SBATCH --partition=gpu-a100-short
+##SBATCH --partition=gpu-a100-short
+#SBATCH --partition=deeplearn
 
 # Multithreaded (SMP) job: must run on one node 
 #SBATCH --nodes=1
@@ -18,7 +19,7 @@
 # Number of GPUs requested per node:
 #SBATCH --gres=gpu:1
 # Slurm QoS:
-##SBATCH --qos=gpgpudeeplearn
+#SBATCH --qos=gpgpudeeplearn
 ##SBATCH --constraint=dlg5
 
 # Requested memory per node:
@@ -64,7 +65,7 @@ python code_review_instruction_few_shot.py \
     --tokenizer_path ./ckpt/deepseek-coder-6.7b-instruct \
     --conf_path ../config/deepseek-coder-few-shot-test.json \
     --temperature 0.0 --top_p 0.95 \
-    --max_new_tokens 512 \
+    --max_new_tokens 2048 \
     --tp_size 1 \
     --debug True
 

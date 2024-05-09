@@ -64,7 +64,7 @@ python code_review_instruction_few_shot.py \
     --tokenizer_path ./ckpt/deepseek-coder-7b-instruct-v1.5 \
     --conf_path ../config/deepseek-coder-few-shot-7b-instruct-codereview.json \
     --temperature 0.0 --top_p 0.95 \
-    --max_new_tokens 512 \
+    --max_new_tokens 2048 \
     --tp_size 1 \
     --debug False
 

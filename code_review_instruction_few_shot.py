@@ -63,22 +63,18 @@ def create_example_prompt(row):
         new = remove_plus(new)
 
         sample_prompt = f"""
-        ## Example
-        Submitted code:
+        #### Example 1:
+        [submitted code]:
         ```
         {old}
         ```
-        Developer comment:
-        ```
-        {comment}
-        ```
-        Improved code:
+        [comment]: {comment}
+        [refined code]:
         ```
         {new}
         ```
-        
-        ---
-        
+
+        ---        
         """
         ret = ret + sample_prompt
 
@@ -109,6 +105,28 @@ def create_prompt(row):
     {comment}
     ```
     Improved code: 
+    """
+    user_prompt = f"""
+    ### Instruction:
+    You are given 3 examples of code review in Examples. Each example begins with #### Example and ends with ---.
+    Each example contains the submitted code, the developer comment, and the refined code.
+    Based on the examples provided, can you improve the submitted code based on the comment?
+    Return the response specified in the Response format. 
+
+    ### Response format:
+    {{"refined_code": "valid refined code", "explanation": "provide explanations of why you made the changes in the code"}} 
+
+    ### Examples:
+    {sample_prompt}
+
+    ### Input:
+    [submitted code]:
+    ```
+    {remove_minus_code_diff}
+    ```
+    [comment]: {comment}
+
+    ### Response: 
     """
     return prompt_header + sample_prompt + main_prompt
 
@@ -167,7 +185,7 @@ def main(
     conf_path: str,
     temperature: float = 0.0,
     top_p: float = 0.95,
-    max_new_tokens: int = 512,
+    max_new_tokens: int = 2048,
     tp_size: int = 1,  # Tensor Parallelism
     debug: bool = False,
 ):
@@ -181,8 +199,37 @@ def main(
         print("CUDA is not available")
         return
 
+    json_schema = """
+    {
+        "title": "get_refined_code",
+        "description": "get refined code based on the comment and the submitted code.",
+        "type": "object",
+        "properties": {
+            "refined_code": {
+                "type": "string",
+                "description": "The refined code based on the comment and the submitted code.",
+            },
+            "explanation": {"type": "string", "description": "Explain why you made the changes in the code."},
+        },
+        "required": ["refined_code", "explanation"],
+    }
+    """
+
+    system_prompt = f"""
+    {cfg.system_prompt}
+
+    <BEGIN JSON SCHEMA>
+    {json_schema}
+    <END JSON SCHEMA>
+
+    Return JSON only. Do not explain or provide usage examples.
+    """
+    print("system_prompt", system_prompt)
+
     # set trust_remote_code=False to use local models
-    sampling_params = SamplingParams(temperature=0.0, top_p=0.9, max_tokens=512)
+    sampling_params = SamplingParams(
+        temperature=temperature, top_p=top_p, max_tokens=max_new_tokens
+    )
     tokenizer = AutoTokenizer.from_pretrained(tokenizer_path, trust_remote_code=False)
     llm = LLM(
         model=ckpt_dir,
@@ -192,7 +239,9 @@ def main(
     )
 
     def make_prompt(user_prompt):
-        instructions = make_instructions(cfg.system_prompt, user_prompt)
+        instructions = make_instructions(system_prompt, user_prompt)
+        if debug:
+            print(f"Instructions: {instructions}")
         return tokenizer.apply_chat_template(
             instructions, add_generation_prompt=True, tokenize=False
         )
