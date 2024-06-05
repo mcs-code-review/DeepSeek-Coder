@@ -22,7 +22,7 @@
 #SBATCH --constraint=dlg5
 
 # Requested memory per node:
-#SBATCH --mem=128G
+##SBATCH --mem=128G
 
 # Use this email address:
 #SBATCH --mail-user=mukhammad.karimov@student.unimelb.edu.au
@@ -35,7 +35,7 @@
 #SBATCH --mail-type=END
 
 # The maximum running time of the job in days-hours:mins:sec
-#SBATCH --time=0-24:0:00
+#SBATCH --time=1:0:00
 
 # Standard output and error log
 #SBATCH -o logs/few-shot-33b-instruct-codereview.log

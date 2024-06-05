@@ -55,7 +55,7 @@ LANGUAGES = {
 def create_example_prompt(row):
     ret = ""
 
-    for example in row["examples"]:
+    for idx, example in enumerate(row["examples"]):
         old, comment = example["_source"]["old"], example["_source"]["comment"]
         new = example["_source"]["new"]
 
@@ -63,7 +63,7 @@ def create_example_prompt(row):
         new = remove_plus(new)
 
         sample_prompt = f"""
-        #### Example 1:
+        #### Example {idx + 1}:
         [submitted code]:
         ```
         {old}
@@ -73,7 +73,6 @@ def create_example_prompt(row):
         ```
         {new}
         ```
-
         ---        
         """
         ret = ret + sample_prompt
@@ -88,33 +87,13 @@ def create_prompt(row):
     remove_minus_code_diff = remove_minus(code_diff)
     # language = LANGUAGES.get(language_code, "Python")
 
-    prompt_header = f"""
-    You are given 3 examples. Each example begins with "##Example" and ends with "---".
-    Each example contains the submitted code, the developer comment, and the improved code.
-    Your task is to improve your submitted code based on the comment that another developer gave you.\n\n
-    """
     sample_prompt = create_example_prompt(row)
 
-    main_prompt = f"""
-    Submitted code:
-    ```
-    {remove_minus_code_diff}
-    ```
-    Developer comment:
-    ```
-    {comment}
-    ```
-    Improved code: 
-    """
     user_prompt = f"""
     ### Instruction:
-    You are given 3 examples of code review in Examples. Each example begins with #### Example and ends with ---.
+    You are given {len(row["examples"])} examples of code review in Examples. Each example begins with #### Example and ends with ---.
     Each example contains the submitted code, the developer comment, and the refined code.
     Based on the examples provided, can you improve the submitted code based on the comment?
-    Return the response specified in the Response format. 
-
-    ### Response format:
-    {{"refined_code": "valid refined code", "explanation": "provide explanations of why you made the changes in the code"}} 
 
     ### Examples:
     {sample_prompt}
@@ -126,9 +105,10 @@ def create_prompt(row):
     ```
     [comment]: {comment}
 
-    ### Response: 
+    ### Response:
+    [refined code]:
     """
-    return prompt_header + sample_prompt + main_prompt
+    return user_prompt
 
 
 def make_instructions(system_prompt, user_prompt):
@@ -215,15 +195,16 @@ def main(
     }
     """
 
-    system_prompt = f"""
-    {cfg.system_prompt}
+    # system_prompt = f"""
+    # {cfg.system_prompt}
 
-    <BEGIN JSON SCHEMA>
-    {json_schema}
-    <END JSON SCHEMA>
+    # <BEGIN JSON SCHEMA>
+    # {json_schema}
+    # <END JSON SCHEMA>
 
-    Return JSON only. Do not explain or provide usage examples.
-    """
+    # Return JSON only. Do not explain or provide usage examples.
+    # """
+    system_prompt = cfg.system_prompt
     print("system_prompt", system_prompt)
 
     # set trust_remote_code=False to use local models
@@ -236,6 +217,7 @@ def main(
         trust_remote_code=False,
         gpu_memory_utilization=0.9,
         tensor_parallel_size=tp_size,
+        max_model_len=30624,
     )
 
     def make_prompt(user_prompt):

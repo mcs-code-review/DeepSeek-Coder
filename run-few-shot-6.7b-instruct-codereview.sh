@@ -1,6 +1,6 @@
 #!/bin/bash
 # Partition for the job:
-#SBATCH --partition=gpu-a100
+#SBATCH --partition=deeplearn
 
 # Multithreaded (SMP) job: must run on one node 
 #SBATCH --nodes=1
@@ -18,7 +18,7 @@
 # Number of GPUs requested per node:
 #SBATCH --gres=gpu:1
 # Slurm QoS:
-##SBATCH --qos=gpgpudeeplearn
+#SBATCH --qos=gpgpudeeplearn
 ##SBATCH --constraint=dlg5
 
 # Requested memory per node:
