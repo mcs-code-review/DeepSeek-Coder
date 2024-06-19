@@ -217,7 +217,7 @@ def main(
         trust_remote_code=False,
         gpu_memory_utilization=0.9,
         tensor_parallel_size=tp_size,
-        max_model_len=30624,
+        max_model_len=13664,
     )
 
     def make_prompt(user_prompt):

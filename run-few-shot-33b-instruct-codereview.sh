@@ -1,6 +1,6 @@
 #!/bin/bash
 # Partition for the job:
-#SBATCH --partition=deeplearn
+#SBATCH --partition=gpu-a100
 
 # Multithreaded (SMP) job: must run on one node 
 #SBATCH --nodes=1
@@ -16,13 +16,13 @@
 #SBATCH --cpus-per-task=8
 
 # Number of GPUs requested per node:
-#SBATCH --gres=gpu:2
+#SBATCH --gres=gpu:4
 # Slurm QoS:
-#SBATCH --qos=gpgpudeeplearn
-#SBATCH --constraint=dlg5
+##SBATCH --qos=gpgpudeeplearn
+##SBATCH --constraint=dlg5
 
 # Requested memory per node:
-##SBATCH --mem=128G
+#SBATCH --mem=128G
 
 # Use this email address:
 #SBATCH --mail-user=mukhammad.karimov@student.unimelb.edu.au
@@ -35,7 +35,7 @@
 #SBATCH --mail-type=END
 
 # The maximum running time of the job in days-hours:mins:sec
-#SBATCH --time=1:0:00
+#SBATCH --time=4:0:00
 
 # Standard output and error log
 #SBATCH -o logs/few-shot-33b-instruct-codereview.log
@@ -65,7 +65,7 @@ python code_review_instruction_few_shot.py \
     --conf_path ../config/deepseek-coder-few-shot-33b-instruct-codereview.json \
     --temperature 0.0 --top_p 0.95 \
     --max_new_tokens 2048 \
-    --tp_size 2 \
+    --tp_size 4 \
     --debug False
 
 ##DO NOT ADD/EDIT BEYOND THIS LINE##
