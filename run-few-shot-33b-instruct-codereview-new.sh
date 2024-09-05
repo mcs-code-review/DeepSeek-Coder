@@ -6,7 +6,7 @@
 #SBATCH --nodes=1
 
 # The name of the job:
-#SBATCH --job-name="few-shot-33b-instruct-codereview"
+#SBATCH --job-name="few-shot-33b-instruct-codereview-new"
 
 # The project ID which this job should run under:
 #SBATCH --account="punim2247"
@@ -38,7 +38,7 @@
 #SBATCH --time=24:0:00
 
 # Standard output and error log
-#SBATCH -o logs/few-shot-33b-instruct-codereview.log
+#SBATCH -o logs/few-shot-33b-instruct-codereview-new.log
 
 # Run the job from the directory where it was launched (default)
 
@@ -62,7 +62,7 @@ source ~/venvs/deepseekcoder/bin/activate
 python code_review_instruction_few_shot.py \
     --ckpt_dir ./ckpt/deepseek-coder-33b-instruct \
     --tokenizer_path ./ckpt/deepseek-coder-33b-instruct \
-    --conf_path ../config/deepseek-coder-few-shot-33b-instruct-codereview.json \
+    --conf_path ../config/deepseek-coder-few-shot-33b-instruct-codereview-new.json \
     --temperature 0.0 --top_p 0.95 \
     --max_new_tokens 2048 \
     --tp_size 2 \

@@ -69,7 +69,7 @@ def create_example_prompt(row):
         {old}
         ```
         [comment]: {comment}
-        [refined code]:
+        [improved code]:
         ```
         {new}
         ```
@@ -82,23 +82,24 @@ def create_example_prompt(row):
 
 def create_prompt(row):
     comment, code_diff = row["comment"], row["old"]
-    # language = row["lang"]
+    language = row["lang"]
 
     remove_minus_code_diff = remove_minus(code_diff)
-    # language = LANGUAGES.get(language_code, "Python")
+    language = LANGUAGES.get(language_code, "Python")
 
     sample_prompt = create_example_prompt(row)
 
     user_prompt = f"""
     ### Instruction:
     You are given {len(row["examples"])} examples of code review in Examples. Each example begins with #### Example and ends with ---.
-    Each example contains the submitted code, the developer comment, and the refined code.
+    Each example contains the submitted code, the developer comment, and the improved code.
     Based on the examples provided, can you improve the submitted code based on the comment?
 
     ### Examples:
     {sample_prompt}
-
-    ### Input:
+    
+    ### Input: 
+    # Based on the examples above, improve the submitted code below written in {language} based on the comment below.
     [submitted code]:
     ```
     {remove_minus_code_diff}
@@ -106,7 +107,7 @@ def create_prompt(row):
     [comment]: {comment}
 
     ### Response:
-    [refined code]:
+    [improved code]:
     """
     return user_prompt
 
