@@ -23,95 +23,6 @@ class Config:
             setattr(self, key, value)
 
 
-def remove_minus(code):
-    """
-    Remove the minus sign from the beginning of each line in the code.
-    """
-    return "\n".join([line[1:] for line in code.split("\n")])
-
-
-def remove_plus(code):
-    """
-    Remove the plus sign from the beginning of each line in the code.
-    """
-    return "\n".join(
-        [line[1:].strip() for line in code.split("\n") if line.strip() != ""]
-    )
-
-
-LANGUAGES = {
-    "py": "Python",
-    "c": "C",
-    "go": "Go",
-    "js": "Javascript",
-    "java": "Java",
-    ".cs": "C#",
-    "php": "php",
-    "cpp": "C++",
-    "rb": "Ruby",
-}
-
-
-def create_example_prompt(row):
-    ret = ""
-
-    for idx, example in enumerate(row["examples"]):
-        old, comment = example["_source"]["old"], example["_source"]["comment"]
-        new = example["_source"]["new"]
-
-        old = remove_minus(old)
-        new = remove_plus(new)
-
-        sample_prompt = f"""
-        #### Example {idx + 1}:
-        [submitted code]:
-        ```
-        {old}
-        ```
-        [comment]: {comment}
-        [improved code]:
-        ```
-        {new}
-        ```
-        ---        
-        """
-        ret = ret + sample_prompt
-
-    return ret
-
-
-def create_prompt(row):
-    comment, code_diff = row["comment"], row["old"]
-    language = row["lang"]
-
-    remove_minus_code_diff = remove_minus(code_diff)
-    language = LANGUAGES.get(language_code, "Python")
-
-    sample_prompt = create_example_prompt(row)
-
-    user_prompt = f"""
-    ### Instruction:
-    You are given {len(row["examples"])} examples of code review in Examples. Each example begins with #### Example and ends with ---.
-    Each example contains the submitted code, the developer comment, and the improved code.
-    Based on the examples provided, can you improve the submitted code based on the comment?
-
-    ### Examples:
-    {sample_prompt}
-    
-    ### Input: 
-    # Based on the examples above, improve the submitted code below written in {language} based on the comment below.
-    [submitted code]:
-    ```
-    {remove_minus_code_diff}
-    ```
-    [comment]: {comment}
-
-    ### Response:
-    [improved code]:
-    """
-    return user_prompt
-
-
 def make_instructions(system_prompt, user_prompt):
     instructions = [
         {"role": "system", "content": system_prompt},
@@ -119,41 +30,13 @@ def make_instructions(system_prompt, user_prompt):
     ]
     return instructions
 
-
-def get_user_prompts(in_path):
-    df = pd.read_json(in_path, lines=True)
-    df["user_prompt"] = df.apply(create_prompt, axis=1)
-    return df
-
-
-def extract_code_diff(text):
-    """
-    Extract code diff from text. Code is assumed to be in the format:
-    ```lang
-    code
-    ```
-    where lang is the language of the code.
-    """
-
-    code = re.findall(r"```[A-Za-z]*\n(.*?)\n```", text, re.DOTALL)
-    if code:
-        return code[0]
-    return "NO CODE"
-
-
-def evaluate_code_diff(actual_code, refined_code):
-    remove_plus_code_diff = remove_plus(actual_code)
-    em, em_trim, _, _, bleu, bleu_trim = myeval(remove_plus_code_diff, refined_code)
-    return em, em_trim, bleu, bleu_trim
-
-
 def save_output(cfg, df):
     dataset_name = os.path.splitext(os.path.basename(cfg.in_path))[0]
     output_dir = f"{cfg.out_dir}/{cfg.model}"
 
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
-    output_path = f"{cfg.out_dir}/{cfg.model}/{dataset_name}_output.jsonl"
+    output_path = f"{cfg.out_dir}/{cfg.model}/{dataset_name}.jsonl"
 
     df.to_json(output_path, orient="records", lines=True)
     return output_path
@@ -229,7 +112,7 @@ def main(
             instructions, add_generation_prompt=True, tokenize=False
         )
 
-    df = get_user_prompts(cfg.in_path)
+    df = pd.read_json(path_or_buf=cfg.in_path, lines=True)
     prompts = df.user_prompt.apply(make_prompt)
 
     if debug:
@@ -241,18 +124,6 @@ def main(
     answers = [output.outputs[0].text for output in outputs]
 
     df["deepseek_answer"] = answers
-    df["deepseek_code"] = df.deepseek_answer.apply(extract_code_diff)
-
-    (
-        df["deepseek_em"],
-        df["deepseek_em_trim"],
-        df["deepseek_bleu"],
-        df["deepseek_bleu_trim"],
-    ) = zip(
-        *df.apply(
-            lambda row: evaluate_code_diff(row["new"], row["deepseek_code"]), axis=1
-        )
-    )
 
     if debug:
         for output in outputs[:5]:
