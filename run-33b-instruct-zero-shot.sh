@@ -60,14 +60,18 @@ echo "$(module list)"
 # The job command(s):
 source ~/venvs/deepseekcoder/bin/activate
 
-# python code_review_instruction_parallel.py \
-#     --ckpt_dir ./ckpt/deepseek-coder-33b-instruct \
-#     --tokenizer_path ./ckpt/deepseek-coder-33b-instruct \
-#     --conf_path ../config/zero-shot/deepseek-coder-33b-instruct-cr.json \
-#     --temperature 0.0 --top_p 0.95 \
-#     --max_new_tokens 512 \
-#     --tp_size 2 \
-#     --debug False
+### CodeReviewer ###
+
+python code_review_instruction_parallel.py \
+    --ckpt_dir ./ckpt/deepseek-coder-33b-instruct \
+    --tokenizer_path ./ckpt/deepseek-coder-33b-instruct \
+    --conf_path ../config/zero-shot/deepseek-coder-33b-instruct-cr.json \
+    --temperature 0.0 --top_p 0.95 \
+    --max_new_tokens 512 \
+    --tp_size 2 \
+    --debug False
+
+### CodeReviewerNew ###
 
 python code_review_instruction_parallel.py \
     --ckpt_dir ./ckpt/deepseek-coder-33b-instruct \
