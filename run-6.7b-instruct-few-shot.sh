@@ -80,14 +80,14 @@ python code_review_instruction_few_shot.py \
     --tp_size 1 \
     --debug False
 
-# python code_review_instruction_few_shot.py \
-#     --ckpt_dir ./ckpt/deepseek-coder-6.7b-instruct \
-#     --tokenizer_path ./ckpt/deepseek-coder-6.7b-instruct \
-#     --conf_path ../config/few-shot/deepseek-coder-6.7b-instruct-cr-bm25-3.json \
-#     --temperature 0.0 --top_p 0.95 \
-#     --max_new_tokens 2048 \
-#     --tp_size 1 \
-#     --debug False
+python code_review_instruction_few_shot.py \
+    --ckpt_dir ./ckpt/deepseek-coder-6.7b-instruct \
+    --tokenizer_path ./ckpt/deepseek-coder-6.7b-instruct \
+    --conf_path ../config/few-shot/deepseek-coder-6.7b-instruct-cr-bm25-3.json \
+    --temperature 0.0 --top_p 0.95 \
+    --max_new_tokens 2048 \
+    --tp_size 1 \
+    --debug False
 
 python code_review_instruction_few_shot.py \
     --ckpt_dir ./ckpt/deepseek-coder-6.7b-instruct \
@@ -100,23 +100,23 @@ python code_review_instruction_few_shot.py \
 
 ### CodeReviewer with Ownership ###
 
-# python code_review_instruction_few_shot.py \
-#     --ckpt_dir ./ckpt/deepseek-coder-6.7b-instruct \
-#     --tokenizer_path ./ckpt/deepseek-coder-6.7b-instruct \
-#     --conf_path ../config/few-shot-with-ownership/deepseek-coder-6.7b-instruct-cr-pkg_aco_bm25-3.json \
-#     --temperature 0.0 --top_p 0.95 \
-#     --max_new_tokens 2048 \
-#     --tp_size 1 \
-#     --debug False
+python code_review_instruction_few_shot.py \
+    --ckpt_dir ./ckpt/deepseek-coder-6.7b-instruct \
+    --tokenizer_path ./ckpt/deepseek-coder-6.7b-instruct \
+    --conf_path ../config/few-shot-with-ownership/deepseek-coder-6.7b-instruct-cr-pkg_aco_bm25-3.json \
+    --temperature 0.0 --top_p 0.95 \
+    --max_new_tokens 2048 \
+    --tp_size 1 \
+    --debug False
 
-# python code_review_instruction_few_shot.py \
-#     --ckpt_dir ./ckpt/deepseek-coder-6.7b-instruct \
-#     --tokenizer_path ./ckpt/deepseek-coder-6.7b-instruct \
-#     --conf_path ../config/few-shot-with-ownership/deepseek-coder-6.7b-instruct-cr-pkg_rso_bm25-3.json \
-#     --temperature 0.0 --top_p 0.95 \
-#     --max_new_tokens 2048 \
-#     --tp_size 1 \
-#     --debug False
+python code_review_instruction_few_shot.py \
+    --ckpt_dir ./ckpt/deepseek-coder-6.7b-instruct \
+    --tokenizer_path ./ckpt/deepseek-coder-6.7b-instruct \
+    --conf_path ../config/few-shot-with-ownership/deepseek-coder-6.7b-instruct-cr-pkg_rso_bm25-3.json \
+    --temperature 0.0 --top_p 0.95 \
+    --max_new_tokens 2048 \
+    --tp_size 1 \
+    --debug False
 
 ### CodeReviewerNew ###
 
