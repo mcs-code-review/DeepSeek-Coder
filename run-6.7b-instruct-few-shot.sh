@@ -62,7 +62,7 @@ source ~/venvs/deepseekcoder/bin/activate
 
 ### CodeReviewer ###
 
-python code_review_instruction_few_shot.py \
+python code_review_instruction_parallel.py \
     --ckpt_dir ./ckpt/deepseek-coder-6.7b-instruct \
     --tokenizer_path ./ckpt/deepseek-coder-6.7b-instruct \
     --conf_path ../config/few-shot/deepseek-coder-6.7b-instruct-cr-bm25-1.json \
@@ -71,7 +71,7 @@ python code_review_instruction_few_shot.py \
     --tp_size 1 \
     --debug False
 
-python code_review_instruction_few_shot.py \
+python code_review_instruction_parallel.py \
     --ckpt_dir ./ckpt/deepseek-coder-6.7b-instruct \
     --tokenizer_path ./ckpt/deepseek-coder-6.7b-instruct \
     --conf_path ../config/few-shot/deepseek-coder-6.7b-instruct-cr-bm25-2.json \
@@ -80,7 +80,7 @@ python code_review_instruction_few_shot.py \
     --tp_size 1 \
     --debug False
 
-python code_review_instruction_few_shot.py \
+python code_review_instruction_parallel.py \
     --ckpt_dir ./ckpt/deepseek-coder-6.7b-instruct \
     --tokenizer_path ./ckpt/deepseek-coder-6.7b-instruct \
     --conf_path ../config/few-shot/deepseek-coder-6.7b-instruct-cr-bm25-3.json \
@@ -89,7 +89,7 @@ python code_review_instruction_few_shot.py \
     --tp_size 1 \
     --debug False
 
-python code_review_instruction_few_shot.py \
+python code_review_instruction_parallel.py \
     --ckpt_dir ./ckpt/deepseek-coder-6.7b-instruct \
     --tokenizer_path ./ckpt/deepseek-coder-6.7b-instruct \
     --conf_path ../config/few-shot/deepseek-coder-6.7b-instruct-cr-bm25-4.json \
@@ -100,7 +100,7 @@ python code_review_instruction_few_shot.py \
 
 ### CodeReviewer with Ownership ###
 
-python code_review_instruction_few_shot.py \
+python code_review_instruction_parallel.py \
     --ckpt_dir ./ckpt/deepseek-coder-6.7b-instruct \
     --tokenizer_path ./ckpt/deepseek-coder-6.7b-instruct \
     --conf_path ../config/few-shot-with-ownership/deepseek-coder-6.7b-instruct-cr-pkg_aco_bm25-3.json \
@@ -109,7 +109,7 @@ python code_review_instruction_few_shot.py \
     --tp_size 1 \
     --debug False
 
-python code_review_instruction_few_shot.py \
+python code_review_instruction_parallel.py \
     --ckpt_dir ./ckpt/deepseek-coder-6.7b-instruct \
     --tokenizer_path ./ckpt/deepseek-coder-6.7b-instruct \
     --conf_path ../config/few-shot-with-ownership/deepseek-coder-6.7b-instruct-cr-pkg_rso_bm25-3.json \
@@ -120,7 +120,7 @@ python code_review_instruction_few_shot.py \
 
 ### CodeReviewerNew ###
 
-python code_review_instruction_few_shot.py \
+python code_review_instruction_parallel.py \
     --ckpt_dir ./ckpt/deepseek-coder-6.7b-instruct \
     --tokenizer_path ./ckpt/deepseek-coder-6.7b-instruct \
     --conf_path ../config/few-shot/deepseek-coder-6.7b-instruct-crn-bm25-1.json \
@@ -129,7 +129,7 @@ python code_review_instruction_few_shot.py \
     --tp_size 1 \
     --debug False
 
-python code_review_instruction_few_shot.py \
+python code_review_instruction_parallel.py \
     --ckpt_dir ./ckpt/deepseek-coder-6.7b-instruct \
     --tokenizer_path ./ckpt/deepseek-coder-6.7b-instruct \
     --conf_path ../config/few-shot/deepseek-coder-6.7b-instruct-crn-bm25-2.json \
@@ -138,7 +138,7 @@ python code_review_instruction_few_shot.py \
     --tp_size 1 \
     --debug False
 
-python code_review_instruction_few_shot.py \
+python code_review_instruction_parallel.py \
     --ckpt_dir ./ckpt/deepseek-coder-6.7b-instruct \
     --tokenizer_path ./ckpt/deepseek-coder-6.7b-instruct \
     --conf_path ../config/few-shot/deepseek-coder-6.7b-instruct-crn-bm25-3.json \
@@ -147,7 +147,7 @@ python code_review_instruction_few_shot.py \
     --tp_size 1 \
     --debug False
 
-python code_review_instruction_few_shot.py \
+python code_review_instruction_parallel.py \
     --ckpt_dir ./ckpt/deepseek-coder-6.7b-instruct \
     --tokenizer_path ./ckpt/deepseek-coder-6.7b-instruct \
     --conf_path ../config/few-shot/deepseek-coder-6.7b-instruct-crn-bm25-4.json \
@@ -158,7 +158,7 @@ python code_review_instruction_few_shot.py \
 
 ### CodeReviewerNew with Ownership ###
 
-python code_review_instruction_few_shot.py \
+python code_review_instruction_parallel.py \
     --ckpt_dir ./ckpt/deepseek-coder-6.7b-instruct \
     --tokenizer_path ./ckpt/deepseek-coder-6.7b-instruct \
     --conf_path ../config/few-shot-with-ownership/deepseek-coder-6.7b-instruct-crn-pkg_aco_bm25-3.json \
@@ -167,7 +167,7 @@ python code_review_instruction_few_shot.py \
     --tp_size 1 \
     --debug False
 
-python code_review_instruction_few_shot.py \
+python code_review_instruction_parallel.py \
     --ckpt_dir ./ckpt/deepseek-coder-6.7b-instruct \
     --tokenizer_path ./ckpt/deepseek-coder-6.7b-instruct \
     --conf_path ../config/few-shot-with-ownership/deepseek-coder-6.7b-instruct-crn-pkg_rso_bm25-3.json \

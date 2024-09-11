@@ -61,7 +61,7 @@ echo "$(module list)"
 # The job command(s):
 source ~/venvs/deepseekcoder/bin/activate
 
-python code_review_instruction_few_shot.py \
+python code_review_instruction_parallel.py \
     --ckpt_dir ./ckpt/deepseek-coder-6.7b-instruct \
     --tokenizer_path ./ckpt/deepseek-coder-6.7b-instruct \
     --conf_path ../config/deepseek-coder-test-few-shot.json \

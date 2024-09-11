@@ -20,6 +20,14 @@ class Config:
             setattr(self, key, value)
 
 
+def make_instructions(system_prompt, user_prompt):
+    instructions = [
+        {"role": "system", "content": system_prompt},
+        {"role": "user", "content": user_prompt},
+    ]
+    return instructions
+
+
 def save_output(cfg, df):
     dataset_name = os.path.splitext(os.path.basename(cfg.in_path))[0]
     output_dir = f"{cfg.out_dir}/{cfg.model}"
@@ -39,7 +47,7 @@ def main(
     conf_path: str,
     temperature: float = 0.0,
     top_p: float = 0.95,
-    max_new_tokens: int = 512,
+    max_new_tokens: int = 2048,
     tp_size: int = 1,  # Tensor Parallelism
     debug: bool = False,
 ):
@@ -53,21 +61,26 @@ def main(
         print("CUDA is not available")
         return
 
+    if debug:
+        print("system_prompt", cfg.system_prompt)
+
     # set trust_remote_code=False to use local models
-    sampling_params = SamplingParams(temperature=0.0, top_p=0.9, max_tokens=512)
+    sampling_params = SamplingParams(
+        temperature=temperature, top_p=top_p, max_tokens=max_new_tokens
+    )
     tokenizer = AutoTokenizer.from_pretrained(tokenizer_path, trust_remote_code=False)
     llm = LLM(
         model=ckpt_dir,
         trust_remote_code=False,
         gpu_memory_utilization=0.9,
         tensor_parallel_size=tp_size,
+        max_model_len=13664,
     )
 
     def make_prompt(user_prompt):
-        instructions = [
-            {"role": "system", "content": cfg.system_prompt},
-            {"role": "user", "content": user_prompt},
-        ]
+        instructions = make_instructions(cfg.system_prompt, user_prompt)
+        if debug:
+            print(f"Instructions: {instructions}")
         return tokenizer.apply_chat_template(
             instructions, add_generation_prompt=True, tokenize=False
         )
