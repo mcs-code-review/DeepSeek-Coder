@@ -1,6 +1,7 @@
 #!/bin/bash
 # Partition for the job:
 #SBATCH --partition=deeplearn
+##SBATCH --partition=gpu-a100
 
 # Multithreaded (SMP) job: must run on one node 
 #SBATCH --nodes=1
@@ -35,7 +36,7 @@
 #SBATCH --mail-type=END
 
 # The maximum running time of the job in days-hours:mins:sec
-#SBATCH --time=12:0:00
+#SBATCH --time=0-24:0:00
 
 # Standard output and error log
 #SBATCH -o logs/33b-instruct-few-shot-%N.%j.out # STDOUT
@@ -59,6 +60,9 @@ echo "$(module list)"
 
 # The job command(s):
 source ~/venvs/deepseekcoder/bin/activate
+
+# export LD_LIBRARY_PATH=~/venvs/deepseekcoder/lib/python3.10/site-packages/nvidia/nvjitlink/lib:$LD_LIBRARY_PATH
+export VLLM_WORKER_MULTIPROC_METHOD=spawn
 
 ### CodeReviewer ###
 
@@ -118,6 +122,35 @@ python code_review_instruction_parallel.py \
     --tp_size 4 \
     --debug False
 
+### CodeReviewer DL ###
+
+python code_review_instruction_parallel.py \
+    --ckpt_dir ./ckpt/deepseek-coder-33b-instruct \
+    --tokenizer_path ./ckpt/deepseek-coder-33b-instruct \
+    --conf_path ../config/few-shot-dl/deepseek-coder-33b-instruct-cr-faiss-1.json \
+    --temperature 0.0 --top_p 0.95 \
+    --max_new_tokens 2048 \
+    --tp_size 4 \
+    --debug False
+
+python code_review_instruction_parallel.py \
+    --ckpt_dir ./ckpt/deepseek-coder-33b-instruct \
+    --tokenizer_path ./ckpt/deepseek-coder-33b-instruct \
+    --conf_path ../config/few-shot-dl/deepseek-coder-33b-instruct-cr-faiss-2.json \
+    --temperature 0.0 --top_p 0.95 \
+    --max_new_tokens 2048 \
+    --tp_size 4 \
+    --debug False
+
+python code_review_instruction_parallel.py \
+    --ckpt_dir ./ckpt/deepseek-coder-33b-instruct \
+    --tokenizer_path ./ckpt/deepseek-coder-33b-instruct \
+    --conf_path ../config/few-shot-dl/deepseek-coder-33b-instruct-cr-faiss-3.json \
+    --temperature 0.0 --top_p 0.95 \
+    --max_new_tokens 2048 \
+    --tp_size 2 \
+    --debug False
+
 ### CodeReviewerNew ###
 
 python code_review_instruction_parallel.py \
@@ -174,6 +207,35 @@ python code_review_instruction_parallel.py \
     --temperature 0.0 --top_p 0.95 \
     --max_new_tokens 2048 \
     --tp_size 4 \
+    --debug False
+
+### CodeReviewer DL ###
+
+python code_review_instruction_parallel.py \
+    --ckpt_dir ./ckpt/deepseek-coder-33b-instruct \
+    --tokenizer_path ./ckpt/deepseek-coder-33b-instruct \
+    --conf_path ../config/few-shot-dl/deepseek-coder-33b-instruct-crn-faiss-1.json \
+    --temperature 0.0 --top_p 0.95 \
+    --max_new_tokens 2048 \
+    --tp_size 4 \
+    --debug False
+
+python code_review_instruction_parallel.py \
+    --ckpt_dir ./ckpt/deepseek-coder-33b-instruct \
+    --tokenizer_path ./ckpt/deepseek-coder-33b-instruct \
+    --conf_path ../config/few-shot-dl/deepseek-coder-33b-instruct-crn-faiss-2.json \
+    --temperature 0.0 --top_p 0.95 \
+    --max_new_tokens 2048 \
+    --tp_size 4 \
+    --debug False
+
+python code_review_instruction_parallel.py \
+    --ckpt_dir ./ckpt/deepseek-coder-33b-instruct \
+    --tokenizer_path ./ckpt/deepseek-coder-33b-instruct \
+    --conf_path ../config/few-shot-dl/deepseek-coder-33b-instruct-crn-faiss-3.json \
+    --temperature 0.0 --top_p 0.95 \
+    --max_new_tokens 2048 \
+    --tp_size 2 \
     --debug False
 
 ##DO NOT ADD/EDIT BEYOND THIS LINE##

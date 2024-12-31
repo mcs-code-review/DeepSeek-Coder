@@ -62,8 +62,8 @@ echo "$(module list)"
 source ~/venvs/deepseekcoder/bin/activate
 
 python code_review_instruction_parallel.py \
-    --ckpt_dir ./ckpt/deepseek-coder-7b-instruct \
-    --tokenizer_path ./ckpt/deepseek-coder-7b-instruct \
+    --ckpt_dir ./ckpt/deepseek-coder-6.7b-instruct \
+    --tokenizer_path ./ckpt/deepseek-coder-6.7b-instruct \
     --conf_path ../config/deepseek-coder-test-few-shot.json \
     --temperature 0.0 --top_p 0.95 \
     --max_new_tokens 2048 \
