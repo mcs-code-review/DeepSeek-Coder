@@ -60,6 +60,9 @@ echo "$(module list)"
 # The job command(s):
 source ~/venvs/deepseekcoder/bin/activate
 
+# export LD_LIBRARY_PATH=~/venvs/deepseekcoder/lib/python3.10/site-packages/nvidia/nvjitlink/lib:$LD_LIBRARY_PATH
+export VLLM_WORKER_MULTIPROC_METHOD=spawn
+
 ### CodeReviewer ###
 
 python code_review_instruction_parallel.py \
