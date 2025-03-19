@@ -36,7 +36,7 @@
 #SBATCH --mail-type=END
 
 # The maximum running time of the job in days-hours:mins:sec
-#SBATCH --time=0-24:0:00
+#SBATCH --time=0-3:0:00
 
 # Standard output and error log
 #SBATCH -o logs/33b-instruct-few-shot-%N.%j.out # STDOUT
@@ -64,179 +64,219 @@ source ~/venvs/deepseekcoder/bin/activate
 # export LD_LIBRARY_PATH=~/venvs/deepseekcoder/lib/python3.10/site-packages/nvidia/nvjitlink/lib:$LD_LIBRARY_PATH
 export VLLM_WORKER_MULTIPROC_METHOD=spawn
 
-### CodeReviewer ###
+### CodeReviewer IR ###
 
-python code_review_instruction_parallel.py \
-    --ckpt_dir ./ckpt/deepseek-coder-33b-instruct \
-    --tokenizer_path ./ckpt/deepseek-coder-33b-instruct \
-    --conf_path ../config/few-shot/deepseek-coder-33b-instruct-cr-bm25-1.json \
-    --temperature 0.0 --top_p 0.95 \
-    --max_new_tokens 2048 \
-    --tp_size 4 \
-    --debug False
+# python code_review_instruction_parallel.py \
+#     --ckpt_dir ./ckpt/deepseek-coder-33b-instruct \
+#     --tokenizer_path ./ckpt/deepseek-coder-33b-instruct \
+#     --conf_path ../config/few-shot-ir/deepseek-coder-33b-instruct-cr-bm25-1.json \
+#     --temperature 0.0 --top_p 0.95 \
+#     --max_new_tokens 2048 \
+#     --tp_size 4 \
+#     --debug False
 
-python code_review_instruction_parallel.py \
-    --ckpt_dir ./ckpt/deepseek-coder-33b-instruct \
-    --tokenizer_path ./ckpt/deepseek-coder-33b-instruct \
-    --conf_path ../config/few-shot/deepseek-coder-33b-instruct-cr-bm25-2.json \
-    --temperature 0.0 --top_p 0.95 \
-    --max_new_tokens 2048 \
-    --tp_size 4 \
-    --debug False
+# python code_review_instruction_parallel.py \
+#     --ckpt_dir ./ckpt/deepseek-coder-33b-instruct \
+#     --tokenizer_path ./ckpt/deepseek-coder-33b-instruct \
+#     --conf_path ../config/few-shot-ir/deepseek-coder-33b-instruct-cr-bm25-2.json \
+#     --temperature 0.0 --top_p 0.95 \
+#     --max_new_tokens 2048 \
+#     --tp_size 4 \
+#     --debug False
 
-python code_review_instruction_parallel.py \
-    --ckpt_dir ./ckpt/deepseek-coder-33b-instruct \
-    --tokenizer_path ./ckpt/deepseek-coder-33b-instruct \
-    --conf_path ../config/few-shot/deepseek-coder-33b-instruct-cr-bm25-3.json \
-    --temperature 0.0 --top_p 0.95 \
-    --max_new_tokens 2048 \
-    --tp_size 4 \
-    --debug False
+# python code_review_instruction_parallel.py \
+#     --ckpt_dir ./ckpt/deepseek-coder-33b-instruct \
+#     --tokenizer_path ./ckpt/deepseek-coder-33b-instruct \
+#     --conf_path ../config/few-shot-ir/deepseek-coder-33b-instruct-cr-bm25-3.json \
+#     --temperature 0.0 --top_p 0.95 \
+#     --max_new_tokens 2048 \
+#     --tp_size 4 \
+#     --debug False
 
-python code_review_instruction_parallel.py \
-    --ckpt_dir ./ckpt/deepseek-coder-33b-instruct \
-    --tokenizer_path ./ckpt/deepseek-coder-33b-instruct \
-    --conf_path ../config/few-shot/deepseek-coder-33b-instruct-cr-bm25-4.json \
-    --temperature 0.0 --top_p 0.95 \
-    --max_new_tokens 2048 \
-    --tp_size 4 \
-    --debug False
+# python code_review_instruction_parallel.py \
+#     --ckpt_dir ./ckpt/deepseek-coder-33b-instruct \
+#     --tokenizer_path ./ckpt/deepseek-coder-33b-instruct \
+#     --conf_path ../config/few-shot-ir/deepseek-coder-33b-instruct-cr-bm25-4.json \
+#     --temperature 0.0 --top_p 0.95 \
+#     --max_new_tokens 2048 \
+#     --tp_size 4 \
+#     --debug False
 
-### CodeReviewer with Ownership ###
+### CodeReviewer with Ownership IR ###
 
-python code_review_instruction_parallel.py \
-    --ckpt_dir ./ckpt/deepseek-coder-33b-instruct \
-    --tokenizer_path ./ckpt/deepseek-coder-33b-instruct \
-    --conf_path ../config/few-shot-with-ownership/deepseek-coder-33b-instruct-cr-pkg_aco_bm25-3.json \
-    --temperature 0.0 --top_p 0.95 \
-    --max_new_tokens 2048 \
-    --tp_size 4 \
-    --debug False
+# python code_review_instruction_parallel.py \
+#     --ckpt_dir ./ckpt/deepseek-coder-33b-instruct \
+#     --tokenizer_path ./ckpt/deepseek-coder-33b-instruct \
+#     --conf_path ../config/few-shot-ir-with-ownership/deepseek-coder-33b-instruct-cr-pkg_aco_bm25-3.json \
+#     --temperature 0.0 --top_p 0.95 \
+#     --max_new_tokens 2048 \
+#     --tp_size 4 \
+#     --debug False
 
-python code_review_instruction_parallel.py \
-    --ckpt_dir ./ckpt/deepseek-coder-33b-instruct \
-    --tokenizer_path ./ckpt/deepseek-coder-33b-instruct \
-    --conf_path ../config/few-shot-with-ownership/deepseek-coder-33b-instruct-cr-pkg_rso_bm25-3.json \
-    --temperature 0.0 --top_p 0.95 \
-    --max_new_tokens 2048 \
-    --tp_size 4 \
-    --debug False
+# python code_review_instruction_parallel.py \
+#     --ckpt_dir ./ckpt/deepseek-coder-33b-instruct \
+#     --tokenizer_path ./ckpt/deepseek-coder-33b-instruct \
+#     --conf_path ../config/few-shot-ir-with-ownership/deepseek-coder-33b-instruct-cr-pkg_rso_bm25-3.json \
+#     --temperature 0.0 --top_p 0.95 \
+#     --max_new_tokens 2048 \
+#     --tp_size 4 \
+#     --debug False
 
 ### CodeReviewer DL ###
 
-python code_review_instruction_parallel.py \
-    --ckpt_dir ./ckpt/deepseek-coder-33b-instruct \
-    --tokenizer_path ./ckpt/deepseek-coder-33b-instruct \
-    --conf_path ../config/few-shot-dl/deepseek-coder-33b-instruct-cr-faiss-1.json \
-    --temperature 0.0 --top_p 0.95 \
-    --max_new_tokens 2048 \
-    --tp_size 4 \
-    --debug False
+# python code_review_instruction_parallel.py \
+#     --ckpt_dir ./ckpt/deepseek-coder-33b-instruct \
+#     --tokenizer_path ./ckpt/deepseek-coder-33b-instruct \
+#     --conf_path ../config/few-shot-dl/deepseek-coder-33b-instruct-cr-faiss-1.json \
+#     --temperature 0.0 --top_p 0.95 \
+#     --max_new_tokens 2048 \
+#     --tp_size 4 \
+#     --debug False
 
-python code_review_instruction_parallel.py \
-    --ckpt_dir ./ckpt/deepseek-coder-33b-instruct \
-    --tokenizer_path ./ckpt/deepseek-coder-33b-instruct \
-    --conf_path ../config/few-shot-dl/deepseek-coder-33b-instruct-cr-faiss-2.json \
-    --temperature 0.0 --top_p 0.95 \
-    --max_new_tokens 2048 \
-    --tp_size 4 \
-    --debug False
+# python code_review_instruction_parallel.py \
+#     --ckpt_dir ./ckpt/deepseek-coder-33b-instruct \
+#     --tokenizer_path ./ckpt/deepseek-coder-33b-instruct \
+#     --conf_path ../config/few-shot-dl/deepseek-coder-33b-instruct-cr-faiss-2.json \
+#     --temperature 0.0 --top_p 0.95 \
+#     --max_new_tokens 2048 \
+#     --tp_size 4 \
+#     --debug False
 
-python code_review_instruction_parallel.py \
-    --ckpt_dir ./ckpt/deepseek-coder-33b-instruct \
-    --tokenizer_path ./ckpt/deepseek-coder-33b-instruct \
-    --conf_path ../config/few-shot-dl/deepseek-coder-33b-instruct-cr-faiss-3.json \
-    --temperature 0.0 --top_p 0.95 \
-    --max_new_tokens 2048 \
-    --tp_size 2 \
-    --debug False
+# python code_review_instruction_parallel.py \
+#     --ckpt_dir ./ckpt/deepseek-coder-33b-instruct \
+#     --tokenizer_path ./ckpt/deepseek-coder-33b-instruct \
+#     --conf_path ../config/few-shot-dl/deepseek-coder-33b-instruct-cr-faiss-3.json \
+#     --temperature 0.0 --top_p 0.95 \
+#     --max_new_tokens 2048 \
+#     --tp_size 2 \
+#     --debug False
 
-### CodeReviewerNew ###
+### CodeReviewer with Ownership DL ###
 
-python code_review_instruction_parallel.py \
-    --ckpt_dir ./ckpt/deepseek-coder-33b-instruct \
-    --tokenizer_path ./ckpt/deepseek-coder-33b-instruct \
-    --conf_path ../config/few-shot/deepseek-coder-33b-instruct-crn-bm25-1.json \
-    --temperature 0.0 --top_p 0.95 \
-    --max_new_tokens 2048 \
-    --tp_size 4 \
-    --debug False
+# python code_review_instruction_parallel.py \
+#     --ckpt_dir ./ckpt/deepseek-coder-33b-instruct \
+#     --tokenizer_path ./ckpt/deepseek-coder-33b-instruct \
+#     --conf_path ../config/few-shot-dl-with-ownership/deepseek-coder-33b-instruct-cr-pkg_aco_bm25-3.json \
+#     --temperature 0.0 --top_p 0.95 \
+#     --max_new_tokens 2048 \
+#     --tp_size 4 \
+#     --debug False
 
-python code_review_instruction_parallel.py \
-    --ckpt_dir ./ckpt/deepseek-coder-33b-instruct \
-    --tokenizer_path ./ckpt/deepseek-coder-33b-instruct \
-    --conf_path ../config/few-shot/deepseek-coder-33b-instruct-crn-bm25-2.json \
-    --temperature 0.0 --top_p 0.95 \
-    --max_new_tokens 2048 \
-    --tp_size 4 \
-    --debug False
+# python code_review_instruction_parallel.py \
+#     --ckpt_dir ./ckpt/deepseek-coder-33b-instruct \
+#     --tokenizer_path ./ckpt/deepseek-coder-33b-instruct \
+#     --conf_path ../config/few-shot-dl-with-ownership/deepseek-coder-33b-instruct-cr-pkg_rso_bm25-3.json \
+#     --temperature 0.0 --top_p 0.95 \
+#     --max_new_tokens 2048 \
+#     --tp_size 4 \
+#     --debug False
 
-python code_review_instruction_parallel.py \
-    --ckpt_dir ./ckpt/deepseek-coder-33b-instruct \
-    --tokenizer_path ./ckpt/deepseek-coder-33b-instruct \
-    --conf_path ../config/few-shot/deepseek-coder-33b-instruct-crn-bm25-3.json \
-    --temperature 0.0 --top_p 0.95 \
-    --max_new_tokens 2048 \
-    --tp_size 4 \
-    --debug False
+### CodeReviewerNew IR ###
+
+# python code_review_instruction_parallel.py \
+#     --ckpt_dir ./ckpt/deepseek-coder-33b-instruct \
+#     --tokenizer_path ./ckpt/deepseek-coder-33b-instruct \
+#     --conf_path ../config/few-shot-ir/deepseek-coder-33b-instruct-crn-bm25-1.json \
+#     --temperature 0.0 --top_p 0.95 \
+#     --max_new_tokens 2048 \
+#     --tp_size 4 \
+#     --debug False
+
+# python code_review_instruction_parallel.py \
+#     --ckpt_dir ./ckpt/deepseek-coder-33b-instruct \
+#     --tokenizer_path ./ckpt/deepseek-coder-33b-instruct \
+#     --conf_path ../config/few-shot-ir/deepseek-coder-33b-instruct-crn-bm25-2.json \
+#     --temperature 0.0 --top_p 0.95 \
+#     --max_new_tokens 2048 \
+#     --tp_size 4 \
+#     --debug False
+
+# python code_review_instruction_parallel.py \
+#     --ckpt_dir ./ckpt/deepseek-coder-33b-instruct \
+#     --tokenizer_path ./ckpt/deepseek-coder-33b-instruct \
+#     --conf_path ../config/few-shot-ir/deepseek-coder-33b-instruct-crn-bm25-3.json \
+#     --temperature 0.0 --top_p 0.95 \
+#     --max_new_tokens 2048 \
+#     --tp_size 4 \
+#     --debug False
 
 python code_CodeReviewerNewreview_instruction_few_shot.py \
     --ckpt_dir ./ckpt/deepseek-coder-33b-instruct \
     --tokenizer_path ./ckpt/deepseek-coder-33b-instruct \
-    --conf_path ../config/few-shot/deepseek-coder-33b-instruct-crn-bm25-4.json \
+    --conf_path ../config/few-shot-ir/deepseek-coder-33b-instruct-crn-bm25-4.json \
     --temperature 0.0 --top_p 0.95 \
     --max_new_tokens 2048 \
     --tp_size 4 \
     --debug False
 
-### CodeReviewerNew with Ownership ###
+### CodeReviewerNew with Ownership IR ###
 
-python code_review_instruction_parallel.py \
-    --ckpt_dir ./ckpt/deepseek-coder-33b-instruct \
-    --tokenizer_path ./ckpt/deepseek-coder-33b-instruct \
-    --conf_path ../config/few-shot-with-ownership/deepseek-coder-33b-instruct-crn-pkg_aco_bm25-3.json \
-    --temperature 0.0 --top_p 0.95 \
-    --max_new_tokens 2048 \
-    --tp_size 4 \
-    --debug False
+# python code_review_instruction_parallel.py \
+#     --ckpt_dir ./ckpt/deepseek-coder-33b-instruct \
+#     --tokenizer_path ./ckpt/deepseek-coder-33b-instruct \
+#     --conf_path ../config/few-shot-ir-with-ownership/deepseek-coder-33b-instruct-crn-pkg_aco_bm25-3.json \
+#     --temperature 0.0 --top_p 0.95 \
+#     --max_new_tokens 2048 \
+#     --tp_size 4 \
+#     --debug False
 
-python code_review_instruction_parallel.py \
-    --ckpt_dir ./ckpt/deepseek-coder-33b-instruct \
-    --tokenizer_path ./ckpt/deepseek-coder-33b-instruct \
-    --conf_path ../config/few-shot-with-ownership/deepseek-coder-33b-instruct-crn-pkg_rso_bm25-3.json \
-    --temperature 0.0 --top_p 0.95 \
-    --max_new_tokens 2048 \
-    --tp_size 4 \
-    --debug False
+# python code_review_instruction_parallel.py \
+#     --ckpt_dir ./ckpt/deepseek-coder-33b-instruct \
+#     --tokenizer_path ./ckpt/deepseek-coder-33b-instruct \
+#     --conf_path ../config/few-shot-ir-with-ownership/deepseek-coder-33b-instruct-crn-pkg_rso_bm25-3.json \
+#     --temperature 0.0 --top_p 0.95 \
+#     --max_new_tokens 2048 \
+#     --tp_size 4 \
+#     --debug False
 
 ### CodeReviewer DL ###
 
-python code_review_instruction_parallel.py \
-    --ckpt_dir ./ckpt/deepseek-coder-33b-instruct \
-    --tokenizer_path ./ckpt/deepseek-coder-33b-instruct \
-    --conf_path ../config/few-shot-dl/deepseek-coder-33b-instruct-crn-faiss-1.json \
-    --temperature 0.0 --top_p 0.95 \
-    --max_new_tokens 2048 \
-    --tp_size 4 \
-    --debug False
+# python code_review_instruction_parallel.py \
+#     --ckpt_dir ./ckpt/deepseek-coder-33b-instruct \
+#     --tokenizer_path ./ckpt/deepseek-coder-33b-instruct \
+#     --conf_path ../config/few-shot-dl/deepseek-coder-33b-instruct-crn-faiss-1.json \
+#     --temperature 0.0 --top_p 0.95 \
+#     --max_new_tokens 2048 \
+#     --tp_size 4 \
+#     --debug False
 
-python code_review_instruction_parallel.py \
-    --ckpt_dir ./ckpt/deepseek-coder-33b-instruct \
-    --tokenizer_path ./ckpt/deepseek-coder-33b-instruct \
-    --conf_path ../config/few-shot-dl/deepseek-coder-33b-instruct-crn-faiss-2.json \
-    --temperature 0.0 --top_p 0.95 \
-    --max_new_tokens 2048 \
-    --tp_size 4 \
-    --debug False
+# python code_review_instruction_parallel.py \
+#     --ckpt_dir ./ckpt/deepseek-coder-33b-instruct \
+#     --tokenizer_path ./ckpt/deepseek-coder-33b-instruct \
+#     --conf_path ../config/few-shot-dl/deepseek-coder-33b-instruct-crn-faiss-2.json \
+#     --temperature 0.0 --top_p 0.95 \
+#     --max_new_tokens 2048 \
+#     --tp_size 4 \
+#     --debug False
 
-python code_review_instruction_parallel.py \
-    --ckpt_dir ./ckpt/deepseek-coder-33b-instruct \
-    --tokenizer_path ./ckpt/deepseek-coder-33b-instruct \
-    --conf_path ../config/few-shot-dl/deepseek-coder-33b-instruct-crn-faiss-3.json \
-    --temperature 0.0 --top_p 0.95 \
-    --max_new_tokens 2048 \
-    --tp_size 2 \
-    --debug False
+# python code_review_instruction_parallel.py \
+#     --ckpt_dir ./ckpt/deepseek-coder-33b-instruct \
+#     --tokenizer_path ./ckpt/deepseek-coder-33b-instruct \
+#     --conf_path ../config/few-shot-dl/deepseek-coder-33b-instruct-crn-faiss-3.json \
+#     --temperature 0.0 --top_p 0.95 \
+#     --max_new_tokens 2048 \
+#     --tp_size 2 \
+#     --debug False
+
+### CodeReviewerNew with Ownership DL ###
+
+# python code_review_instruction_parallel.py \
+#     --ckpt_dir ./ckpt/deepseek-coder-33b-instruct \
+#     --tokenizer_path ./ckpt/deepseek-coder-33b-instruct \
+#     --conf_path ../config/few-shot-dl-with-ownership/deepseek-coder-33b-instruct-crn-pkg_aco_bm25-3.json \
+#     --temperature 0.0 --top_p 0.95 \
+#     --max_new_tokens 2048 \
+#     --tp_size 4 \
+#     --debug False
+
+# python code_review_instruction_parallel.py \
+#     --ckpt_dir ./ckpt/deepseek-coder-33b-instruct \
+#     --tokenizer_path ./ckpt/deepseek-coder-33b-instruct \
+#     --conf_path ../config/few-shot-dl-with-ownership/deepseek-coder-33b-instruct-crn-pkg_rso_bm25-3.json \
+#     --temperature 0.0 --top_p 0.95 \
+#     --max_new_tokens 2048 \
+#     --tp_size 4 \
+#     --debug False
 
 ##DO NOT ADD/EDIT BEYOND THIS LINE##
 ##Job monitor command to list the resource usage
