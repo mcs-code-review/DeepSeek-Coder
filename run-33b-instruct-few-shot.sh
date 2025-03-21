@@ -200,7 +200,7 @@ export VLLM_WORKER_MULTIPROC_METHOD=spawn
 #     --tp_size 4 \
 #     --debug False
 
-python code_CodeReviewerNewreview_instruction_few_shot.py \
+python code_review_instruction_parallel.py \
     --ckpt_dir ./ckpt/deepseek-coder-33b-instruct \
     --tokenizer_path ./ckpt/deepseek-coder-33b-instruct \
     --conf_path ../config/few-shot-ir/deepseek-coder-33b-instruct-crn-bm25-4.json \
