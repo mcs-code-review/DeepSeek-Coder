@@ -156,7 +156,7 @@ export VLLM_WORKER_MULTIPROC_METHOD=spawn
 # python code_review_instruction_parallel.py \
 #     --ckpt_dir ./ckpt/deepseek-coder-33b-instruct \
 #     --tokenizer_path ./ckpt/deepseek-coder-33b-instruct \
-#     --conf_path ../config/few-shot-dl-with-ownership/deepseek-coder-33b-instruct-cr-pkg_aco_bm25-3.json \
+#     --conf_path ../config/few-shot-dl-with-ownership/deepseek-coder-33b-instruct-cr-pkg_aco_faiss-3.json \
 #     --temperature 0.0 --top_p 0.95 \
 #     --max_new_tokens 2048 \
 #     --tp_size 4 \
@@ -165,7 +165,7 @@ export VLLM_WORKER_MULTIPROC_METHOD=spawn
 # python code_review_instruction_parallel.py \
 #     --ckpt_dir ./ckpt/deepseek-coder-33b-instruct \
 #     --tokenizer_path ./ckpt/deepseek-coder-33b-instruct \
-#     --conf_path ../config/few-shot-dl-with-ownership/deepseek-coder-33b-instruct-cr-pkg_rso_bm25-3.json \
+#     --conf_path ../config/few-shot-dl-with-ownership/deepseek-coder-33b-instruct-cr-pkg_rso_faiss-3.json \
 #     --temperature 0.0 --top_p 0.95 \
 #     --max_new_tokens 2048 \
 #     --tp_size 4 \
@@ -263,7 +263,7 @@ python code_review_instruction_parallel.py \
 # python code_review_instruction_parallel.py \
 #     --ckpt_dir ./ckpt/deepseek-coder-33b-instruct \
 #     --tokenizer_path ./ckpt/deepseek-coder-33b-instruct \
-#     --conf_path ../config/few-shot-dl-with-ownership/deepseek-coder-33b-instruct-crn-pkg_aco_bm25-3.json \
+#     --conf_path ../config/few-shot-dl-with-ownership/deepseek-coder-33b-instruct-crn-pkg_aco_faiss-3.json \
 #     --temperature 0.0 --top_p 0.95 \
 #     --max_new_tokens 2048 \
 #     --tp_size 4 \
@@ -272,7 +272,7 @@ python code_review_instruction_parallel.py \
 # python code_review_instruction_parallel.py \
 #     --ckpt_dir ./ckpt/deepseek-coder-33b-instruct \
 #     --tokenizer_path ./ckpt/deepseek-coder-33b-instruct \
-#     --conf_path ../config/few-shot-dl-with-ownership/deepseek-coder-33b-instruct-crn-pkg_rso_bm25-3.json \
+#     --conf_path ../config/few-shot-dl-with-ownership/deepseek-coder-33b-instruct-crn-pkg_rso_faiss-3.json \
 #     --temperature 0.0 --top_p 0.95 \
 #     --max_new_tokens 2048 \
 #     --tp_size 4 \
