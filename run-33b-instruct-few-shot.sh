@@ -36,7 +36,7 @@
 #SBATCH --mail-type=END
 
 # The maximum running time of the job in days-hours:mins:sec
-#SBATCH --time=0-12:0:00
+#SBATCH --time=0-6:0:00
 
 # Standard output and error log
 #SBATCH -o logs/33b-instruct-few-shot-%N.%j.out # STDOUT
@@ -153,23 +153,23 @@ export VLLM_WORKER_MULTIPROC_METHOD=spawn
 
 ### CodeReviewer with Ownership DL ###
 
-python code_review_instruction_parallel.py \
-    --ckpt_dir ./ckpt/deepseek-coder-33b-instruct \
-    --tokenizer_path ./ckpt/deepseek-coder-33b-instruct \
-    --conf_path ../config/few-shot-dl-with-ownership/deepseek-coder-33b-instruct-cr-pkg_aco_faiss-3.json \
-    --temperature 0.0 --top_p 0.95 \
-    --max_new_tokens 2048 \
-    --tp_size 4 \
-    --debug False
+# python code_review_instruction_parallel.py \
+#     --ckpt_dir ./ckpt/deepseek-coder-33b-instruct \
+#     --tokenizer_path ./ckpt/deepseek-coder-33b-instruct \
+#     --conf_path ../config/few-shot-dl-with-ownership/deepseek-coder-33b-instruct-cr-pkg_aco_faiss-3.json \
+#     --temperature 0.0 --top_p 0.95 \
+#     --max_new_tokens 2048 \
+#     --tp_size 4 \
+#     --debug False
 
-python code_review_instruction_parallel.py \
-    --ckpt_dir ./ckpt/deepseek-coder-33b-instruct \
-    --tokenizer_path ./ckpt/deepseek-coder-33b-instruct \
-    --conf_path ../config/few-shot-dl-with-ownership/deepseek-coder-33b-instruct-cr-pkg_rso_faiss-3.json \
-    --temperature 0.0 --top_p 0.95 \
-    --max_new_tokens 2048 \
-    --tp_size 4 \
-    --debug False
+# python code_review_instruction_parallel.py \
+#     --ckpt_dir ./ckpt/deepseek-coder-33b-instruct \
+#     --tokenizer_path ./ckpt/deepseek-coder-33b-instruct \
+#     --conf_path ../config/few-shot-dl-with-ownership/deepseek-coder-33b-instruct-cr-pkg_rso_faiss-3.json \
+#     --temperature 0.0 --top_p 0.95 \
+#     --max_new_tokens 2048 \
+#     --tp_size 4 \
+#     --debug False
 
 ### CodeReviewerNew IR ###
 
