@@ -35,7 +35,7 @@
 #SBATCH --mail-type=END
 
 # The maximum running time of the job in days-hours:mins:sec
-#SBATCH --time=0-24:0:00
+#SBATCH --time=0-5:0:00
 
 # Standard output and error log
 #SBATCH -o logs/72b-instruct-few-shot-%N.%j.out # STDOUT
@@ -65,61 +65,61 @@ export VLLM_WORKER_MULTIPROC_METHOD=spawn
 
 ### CodeReviewer IR ###
 
-python code_review_instruction_parallel.py \
-    --ckpt_dir ./ckpt/Qwen2.5-72B-Instruct \
-    --tokenizer_path ./ckpt/Qwen2.5-72B-Instruct \
-    --conf_path ../config/few-shot-ir/qwen2.5-72B-instruct-cr-bm25-1.json \
-    --temperature 0.0 --top_p 0.95 \
-    --max_new_tokens 2048 \
-    --tp_size 4 \
-    --debug False
+# python code_review_instruction_parallel.py \
+#     --ckpt_dir ./ckpt/Qwen2.5-72B-Instruct \
+#     --tokenizer_path ./ckpt/Qwen2.5-72B-Instruct \
+#     --conf_path ../config/few-shot-ir/qwen2.5-72B-instruct-cr-bm25-1.json \
+#     --temperature 0.0 --top_p 0.95 \
+#     --max_new_tokens 2048 \
+#     --tp_size 4 \
+#     --debug False
 
-python code_review_instruction_parallel.py \
-    --ckpt_dir ./ckpt/Qwen2.5-72B-Instruct \
-    --tokenizer_path ./ckpt/Qwen2.5-72B-Instruct \
-    --conf_path ../config/few-shot-ir/qwen2.5-72B-instruct-cr-bm25-2.json \
-    --temperature 0.0 --top_p 0.95 \
-    --max_new_tokens 2048 \
-    --tp_size 4 \
-    --debug False
+# python code_review_instruction_parallel.py \
+#     --ckpt_dir ./ckpt/Qwen2.5-72B-Instruct \
+#     --tokenizer_path ./ckpt/Qwen2.5-72B-Instruct \
+#     --conf_path ../config/few-shot-ir/qwen2.5-72B-instruct-cr-bm25-2.json \
+#     --temperature 0.0 --top_p 0.95 \
+#     --max_new_tokens 2048 \
+#     --tp_size 4 \
+#     --debug False
 
-python code_review_instruction_parallel.py \
-    --ckpt_dir ./ckpt/Qwen2.5-72B-Instruct \
-    --tokenizer_path ./ckpt/Qwen2.5-72B-Instruct \
-    --conf_path ../config/few-shot-ir/qwen2.5-72B-instruct-cr-bm25-3.json \
-    --temperature 0.0 --top_p 0.95 \
-    --max_new_tokens 2048 \
-    --tp_size 4 \
-    --debug False
+# python code_review_instruction_parallel.py \
+#     --ckpt_dir ./ckpt/Qwen2.5-72B-Instruct \
+#     --tokenizer_path ./ckpt/Qwen2.5-72B-Instruct \
+#     --conf_path ../config/few-shot-ir/qwen2.5-72B-instruct-cr-bm25-3.json \
+#     --temperature 0.0 --top_p 0.95 \
+#     --max_new_tokens 2048 \
+#     --tp_size 4 \
+#     --debug False
 
-python code_review_instruction_parallel.py \
-    --ckpt_dir ./ckpt/Qwen2.5-72B-Instruct \
-    --tokenizer_path ./ckpt/Qwen2.5-72B-Instruct \
-    --conf_path ../config/few-shot-ir/qwen2.5-72B-instruct-cr-bm25-4.json \
-    --temperature 0.0 --top_p 0.95 \
-    --max_new_tokens 2048 \
-    --tp_size 4 \
-    --debug False
+# python code_review_instruction_parallel.py \
+#     --ckpt_dir ./ckpt/Qwen2.5-72B-Instruct \
+#     --tokenizer_path ./ckpt/Qwen2.5-72B-Instruct \
+#     --conf_path ../config/few-shot-ir/qwen2.5-72B-instruct-cr-bm25-4.json \
+#     --temperature 0.0 --top_p 0.95 \
+#     --max_new_tokens 2048 \
+#     --tp_size 4 \
+#     --debug False
 
 ### CodeReviewer DL ###
 
-python code_review_instruction_parallel.py \
-    --ckpt_dir ./ckpt/Qwen2.5-72B-Instruct \
-    --tokenizer_path ./ckpt/Qwen2.5-72B-Instruct \
-    --conf_path ../config/few-shot-dl/qwen2.5-72B-instruct-cr-faiss-1.json \
-    --temperature 0.0 --top_p 0.95 \
-    --max_new_tokens 2048 \
-    --tp_size 4 \
-    --debug False
+# python code_review_instruction_parallel.py \
+#     --ckpt_dir ./ckpt/Qwen2.5-72B-Instruct \
+#     --tokenizer_path ./ckpt/Qwen2.5-72B-Instruct \
+#     --conf_path ../config/few-shot-dl/qwen2.5-72B-instruct-cr-faiss-1.json \
+#     --temperature 0.0 --top_p 0.95 \
+#     --max_new_tokens 2048 \
+#     --tp_size 4 \
+#     --debug False
 
-python code_review_instruction_parallel.py \
-    --ckpt_dir ./ckpt/Qwen2.5-72B-Instruct \
-    --tokenizer_path ./ckpt/Qwen2.5-72B-Instruct \
-    --conf_path ../config/few-shot-dl/qwen2.5-72B-instruct-cr-faiss-2.json \
-    --temperature 0.0 --top_p 0.95 \
-    --max_new_tokens 2048 \
-    --tp_size 4 \
-    --debug False
+# python code_review_instruction_parallel.py \
+#     --ckpt_dir ./ckpt/Qwen2.5-72B-Instruct \
+#     --tokenizer_path ./ckpt/Qwen2.5-72B-Instruct \
+#     --conf_path ../config/few-shot-dl/qwen2.5-72B-instruct-cr-faiss-2.json \
+#     --temperature 0.0 --top_p 0.95 \
+#     --max_new_tokens 2048 \
+#     --tp_size 4 \
+#     --debug False
 
 python code_review_instruction_parallel.py \
     --ckpt_dir ./ckpt/Qwen2.5-72B-Instruct \
@@ -132,61 +132,61 @@ python code_review_instruction_parallel.py \
 
 ### CodeReviewerNew IR ###
 
-python code_review_instruction_parallel.py \
-    --ckpt_dir ./ckpt/Qwen2.5-72B-Instruct \
-    --tokenizer_path ./ckpt/Qwen2.5-72B-Instruct \
-    --conf_path ../config/few-shot-ir/qwen2.5-72B-instruct-crn-bm25-1.json \
-    --temperature 0.0 --top_p 0.95 \
-    --max_new_tokens 2048 \
-    --tp_size 4 \
-    --debug False
+# python code_review_instruction_parallel.py \
+#     --ckpt_dir ./ckpt/Qwen2.5-72B-Instruct \
+#     --tokenizer_path ./ckpt/Qwen2.5-72B-Instruct \
+#     --conf_path ../config/few-shot-ir/qwen2.5-72B-instruct-crn-bm25-1.json \
+#     --temperature 0.0 --top_p 0.95 \
+#     --max_new_tokens 2048 \
+#     --tp_size 4 \
+#     --debug False
 
-python code_review_instruction_parallel.py \
-    --ckpt_dir ./ckpt/Qwen2.5-72B-Instruct \
-    --tokenizer_path ./ckpt/Qwen2.5-72B-Instruct \
-    --conf_path ../config/few-shot-ir/qwen2.5-72B-instruct-crn-bm25-2.json \
-    --temperature 0.0 --top_p 0.95 \
-    --max_new_tokens 2048 \
-    --tp_size 4 \
-    --debug False
+# python code_review_instruction_parallel.py \
+#     --ckpt_dir ./ckpt/Qwen2.5-72B-Instruct \
+#     --tokenizer_path ./ckpt/Qwen2.5-72B-Instruct \
+#     --conf_path ../config/few-shot-ir/qwen2.5-72B-instruct-crn-bm25-2.json \
+#     --temperature 0.0 --top_p 0.95 \
+#     --max_new_tokens 2048 \
+#     --tp_size 4 \
+#     --debug False
 
-python code_review_instruction_parallel.py \
-    --ckpt_dir ./ckpt/Qwen2.5-72B-Instruct \
-    --tokenizer_path ./ckpt/Qwen2.5-72B-Instruct \
-    --conf_path ../config/few-shot-ir/qwen2.5-72B-instruct-crn-bm25-3.json \
-    --temperature 0.0 --top_p 0.95 \
-    --max_new_tokens 2048 \
-    --tp_size 4 \
-    --debug False
+# python code_review_instruction_parallel.py \
+#     --ckpt_dir ./ckpt/Qwen2.5-72B-Instruct \
+#     --tokenizer_path ./ckpt/Qwen2.5-72B-Instruct \
+#     --conf_path ../config/few-shot-ir/qwen2.5-72B-instruct-crn-bm25-3.json \
+#     --temperature 0.0 --top_p 0.95 \
+#     --max_new_tokens 2048 \
+#     --tp_size 4 \
+#     --debug False
 
-python code_review_instruction_parallel.py \
-    --ckpt_dir ./ckpt/Qwen2.5-72B-Instruct \
-    --tokenizer_path ./ckpt/Qwen2.5-72B-Instruct \
-    --conf_path ../config/few-shot-ir/qwen2.5-72B-instruct-crn-bm25-4.json \
-    --temperature 0.0 --top_p 0.95 \
-    --max_new_tokens 2048 \
-    --tp_size 4 \
-    --debug False
+# python code_review_instruction_parallel.py \
+#     --ckpt_dir ./ckpt/Qwen2.5-72B-Instruct \
+#     --tokenizer_path ./ckpt/Qwen2.5-72B-Instruct \
+#     --conf_path ../config/few-shot-ir/qwen2.5-72B-instruct-crn-bm25-4.json \
+#     --temperature 0.0 --top_p 0.95 \
+#     --max_new_tokens 2048 \
+#     --tp_size 4 \
+#     --debug False
 
 ### CodeReviewerNew DL ###
 
-python code_review_instruction_parallel.py \
-    --ckpt_dir ./ckpt/Qwen2.5-72B-Instruct \
-    --tokenizer_path ./ckpt/Qwen2.5-72B-Instruct \
-    --conf_path ../config/few-shot-dl/qwen2.5-72B-instruct-crn-faiss-1.json \
-    --temperature 0.0 --top_p 0.95 \
-    --max_new_tokens 2048 \
-    --tp_size 4 \
-    --debug False
+# python code_review_instruction_parallel.py \
+#     --ckpt_dir ./ckpt/Qwen2.5-72B-Instruct \
+#     --tokenizer_path ./ckpt/Qwen2.5-72B-Instruct \
+#     --conf_path ../config/few-shot-dl/qwen2.5-72B-instruct-crn-faiss-1.json \
+#     --temperature 0.0 --top_p 0.95 \
+#     --max_new_tokens 2048 \
+#     --tp_size 4 \
+#     --debug False
 
-python code_review_instruction_parallel.py \
-    --ckpt_dir ./ckpt/Qwen2.5-72B-Instruct \
-    --tokenizer_path ./ckpt/Qwen2.5-72B-Instruct \
-    --conf_path ../config/few-shot-dl/qwen2.5-72B-instruct-crn-faiss-2.json \
-    --temperature 0.0 --top_p 0.95 \
-    --max_new_tokens 2048 \
-    --tp_size 4 \
-    --debug False
+# python code_review_instruction_parallel.py \
+#     --ckpt_dir ./ckpt/Qwen2.5-72B-Instruct \
+#     --tokenizer_path ./ckpt/Qwen2.5-72B-Instruct \
+#     --conf_path ../config/few-shot-dl/qwen2.5-72B-instruct-crn-faiss-2.json \
+#     --temperature 0.0 --top_p 0.95 \
+#     --max_new_tokens 2048 \
+#     --tp_size 4 \
+#     --debug False
 
 python code_review_instruction_parallel.py \
     --ckpt_dir ./ckpt/Qwen2.5-72B-Instruct \
